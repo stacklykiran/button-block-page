@@ -14,7 +14,7 @@ export default function Header() {
         {/* Logo */}
         <div className="flex h-8 min-w-[92px] items-center justify-center overflow-hidden rounded-[50%] bg-white px-3 sm:h-9 sm:min-w-[104px]">
           <img
-            src="public/stackly-logo.webp"
+            src="public/stackly-logo1.png"
             alt="Stackly logo"
             className="h-[18px] w-auto sm:h-[20px]"
           />

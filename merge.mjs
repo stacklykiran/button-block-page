@@ -80,7 +80,7 @@ const htmlTemplate = `<!DOCTYPE html>
     const { 
       ChevronDown, ChevronUp, ChevronRight, ChevronLeft, Undo2, Redo2, Eye, Send, X, Play, Menu, SlidersHorizontal, Save,
       ShoppingCart, Search, Mic, Type, Image: ImageIcon, MousePointerSquareDashed, 
-      Video, MonitorPlay, Minus, LayoutTemplate, Columns, Heading, HelpCircle, Maximize
+      Video, MonitorPlay, Minus, LayoutTemplate, Columns, Heading, HelpCircle, Maximize, LogOut
     } = LucideReact;
 
     // React's Menu icon shadows something if we're not careful, but wait, the component imports Menu as MenuIcon

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, Play, Maximize } from 'lucide-react';
+import { ChevronDown, Play, Maximize, ChevronLeft, ChevronRight, LogOut } from 'lucide-react';
 import { BlockData } from '../types';
 
 interface RightSidebarProps {
@@ -77,16 +77,29 @@ export default function RightSidebar({ selectedBlock, onUpdateBlock }: RightSide
                 {/* Width */}
                 <div>
                   <h4 className="text-[#0B1D40] text-[15px] font-bold mb-3">Width</h4>
-                  <div className="w-full border border-gray-300 bg-white rounded-lg flex items-center justify-between overflow-hidden focus-within:border-blue-500 transition-colors">
+                  <div className="w-full border border-[#0B1D40] bg-transparent rounded-xl flex items-center justify-between overflow-hidden focus-within:ring-2 focus-within:ring-blue-100 transition-colors">
                     <input 
                       type="text" 
-                      className="flex-1 px-4 py-2.5 text-[15px] text-center text-[#0B1D40] font-bold border-r border-gray-200 focus:outline-none"
+                      className="flex-1 px-4 py-2.5 text-[15px] text-center text-[#0B1D40] font-bold border-r border-[#0B1D40] bg-transparent focus:outline-none"
                       value={width}
                       onChange={(e) => onUpdateBlock(id, { ...props, width: e.target.value })}
                     />
-                    <button className="px-3 md:px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-500 flex-shrink-0 focus:outline-none">
-                      <ChevronDown className="w-4 h-4" />
+                    <button className="px-3 md:px-4 py-2.5 bg-transparent hover:bg-black/5 text-[#0B1D40] flex-shrink-0 focus:outline-none">
+                      <ChevronDown className="w-4 h-4" strokeWidth={2.5} />
                     </button>
+                  </div>
+                </div>
+
+                {/* Border Radius */}
+                <div>
+                  <h4 className="text-[#0B1D40] text-[15px] font-bold mb-3">Border Radius</h4>
+                  <div className="w-full border border-[#0B1D40] bg-transparent rounded-xl flex items-center overflow-hidden focus-within:ring-2 focus-within:ring-blue-100 transition-colors">
+                     <input 
+                       type="text" 
+                       className="w-full text-center py-2.5 text-[15px] text-[#0B1D40] font-bold bg-transparent focus:outline-none"
+                       value={borderRadius}
+                       onChange={(e) => onUpdateBlock(id, { ...props, borderRadius: e.target.value })}
+                     />
                   </div>
                 </div>
               </div>
@@ -102,75 +115,63 @@ export default function RightSidebar({ selectedBlock, onUpdateBlock }: RightSide
                   <ChevronDown className={`w-4 h-4 text-gray-600 transition-transform ${showPlay ? '' : '-rotate-90'}`} />
                </button>
 
-               {showPlay && (
+                {showPlay && (
                  <>
-                   <div className="flex items-center gap-3">
-              <button className="w-8 h-8 rounded-full bg-[#0B1D40] text-white flex items-center justify-center shadow-sm hover:bg-[#152B52]">
-                <ChevronDown className="w-4 h-4 rotate-90" />
-              </button>
-              
-              <span className="text-gray-400 font-bold text-lg leading-none">+</span>
-              
-                   <div className="flex items-center gap-4 px-2">
-                      {/* Replaced slider with an empty gap or just removing the element */}
+                   <div className="flex items-center justify-between px-2 mt-4 mb-8">
+                     <button className="w-10 h-10 rounded-xl bg-[#0B1D40] text-white flex items-center justify-center shadow-sm hover:bg-[#152B52] transition">
+                       <ChevronLeft className="w-6 h-6" />
+                     </button>
+                     
+                     <span className="text-[#0B1D40] font-semibold text-[26px] leading-none">+</span>
+                     
+                     <button 
+                       className="h-10 px-5 rounded-full bg-[#0B1D40] text-white flex items-center justify-center shadow-sm gap-2 hover:bg-[#152B52] transition"
+                       onClick={() => alert("Forward mapped!")}
+                     >
+                       <div className="w-[12px] h-[12px] rounded-full bg-white flex-shrink-0"></div>
+                       <ChevronRight className="w-6 h-6" />
+                     </button>
+
+                     <button className="w-10 h-10 rounded-xl bg-[#0B1D40] text-white flex items-center justify-center shadow-sm hover:bg-[#152B52] transition">
+                       <ChevronRight className="w-6 h-6" />
+                     </button>
                    </div>
 
-                   <button 
-                     className="w-8 h-8 rounded-full bg-[#0B1D40] text-white flex items-center justify-center shadow-sm hover:bg-[#152B52]"
-                     onClick={() => alert("Forward mapped!")}
-                   >
-                     <ChevronDown className="w-4 h-4 -rotate-90" />
-                   </button>
-                </div>
-
-                <div className="mt-6 w-full border border-gray-300 bg-transparent rounded-xl flex items-center justify-between px-5 py-2 hover:bg-black/5 transition-colors">
-                  <button 
-                    className="text-gray-500 hover:text-[#0B1D40] font-medium text-xl leading-none flex items-center justify-center"
-                    onClick={() => handleWidthChange(-20)}
-                    title="Decrease Width"
-                  >
-                    –
-                  </button>
-                  <button 
-                    className="text-gray-500 hover:text-[#0B1D40] font-medium text-[22px] leading-none flex items-center justify-center"
-                    onClick={() => handleWidthChange(20)}
-                    title="Increase Width"
-                  >
-                    +
-                  </button>
-                  <button 
-                    className="text-gray-500 hover:text-[#0B1D40] font-medium leading-none flex items-center justify-center"
-                    onClick={() => alert("Flow layout execution.")}
-                  >
-                    <span className="text-lg">→</span>
-                  </button>
-                  <button 
-                    className="text-gray-500 hover:text-[#0B1D40] flex items-center justify-center"
-                    onClick={() => onUpdateBlock(id, { ...props, width: '100%' })}
-                    title="Maximize Width"
-                  >
-                    <Maximize className="w-[18px] h-[18px]" />
-                  </button>
-                </div>
-              </>
-             )}
+                   <div className="w-full border border-[#0B1D40] bg-transparent rounded-[14px] flex flex-row items-center justify-between px-6 py-2.5 hover:bg-black/5 transition-colors">
+                     <button 
+                       className="text-[#0B1D40] hover:text-black font-semibold text-2xl leading-[0] flex items-center justify-center"
+                       onClick={() => handleWidthChange(-20)}
+                       title="Decrease Width"
+                     >
+                       –
+                     </button>
+                     <button 
+                       className="text-[#0B1D40] hover:text-black font-semibold text-[26px] leading-[0] flex items-center justify-center"
+                       onClick={() => handleWidthChange(20)}
+                       title="Increase Width"
+                     >
+                       +
+                     </button>
+                     <button 
+                       className="text-[#0B1D40] hover:text-black flex justify-center items-center font-medium leading-[0]"
+                       onClick={() => alert("Flow layout execution.")}
+                     >
+                       <ChevronRight className="w-[24px] h-[24px]" strokeWidth={2.5}/>
+                     </button>
+                     <button 
+                       className="text-[#0B1D40] hover:text-black flex items-center justify-center leading-[0]"
+                       onClick={() => onUpdateBlock(id, { ...props, width: '100%' })}
+                       title="Maximize Width"
+                     >
+                       <LogOut className="w-[20px] h-[20px]" strokeWidth={2.5} />
+                     </button>
+                   </div>
+                 </>
+                )}
             </div>
           </>
         ) : (
           <div className="space-y-6 pt-2">
-            {/* Border Radius moved to Styles tab */}
-            <div>
-              <h4 className="text-[#0B1D40] text-[15px] font-bold mb-3">Border Radius</h4>
-              <div className="w-full border border-gray-300 bg-white rounded-lg flex items-center overflow-hidden focus-within:border-blue-500 transition-colors">
-                 <input 
-                   type="text" 
-                   className="w-full text-center py-2.5 text-[15px] text-[#0B1D40] font-bold focus:outline-none"
-                   value={borderRadius}
-                   onChange={(e) => onUpdateBlock(id, { ...props, borderRadius: e.target.value })}
-                 />
-              </div>
-            </div>
-            
             <div className="text-center p-6 text-gray-400 font-medium text-sm border-2 border-dashed border-gray-200 rounded-lg">
                More typography and color styling options coming soon in next major update.
             </div>
