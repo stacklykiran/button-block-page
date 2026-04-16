@@ -1,0 +1,964 @@
+
+    const { useState, useEffect, useRef, useMemo, useCallback } = React;
+    const { 
+      ChevronDown, ChevronUp, ChevronRight, ChevronLeft, Undo2, Redo2, Eye, Send, X, Play, Menu, SlidersHorizontal, Save,
+      ShoppingCart, Search, Mic, Type, Image: ImageIcon, MousePointerSquareDashed, 
+      Video, MonitorPlay, Minus, LayoutTemplate, Columns, Heading, HelpCircle, Maximize
+    } = LucideReact;
+
+    // React's Menu icon shadows something if we're not careful, but wait, the component imports Menu as MenuIcon
+    const MenuIcon = Menu;
+
+    
+/* --- index.ts --- */
+type BlockType = 'button' | 'video' | 'text' | 'image' | 'card' | 'divider' | 'section' | 'columns' | 'header';
+
+interface BlockData {
+  id: string;
+  type: BlockType;
+  props: {
+    width?: string;
+    borderRadius?: string;
+    content?: string;
+    [key: string]: any;
+  };
+}
+
+/* --- Header.tsx --- */
+
+
+function Header() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const handleNavClick = (actionText: string) => {
+    alert(actionText);
+    setIsMobileMenuOpen(false);
+  };
+  return (
+    <header className="h-[80px] bg-[#0B1D40] flex items-center justify-between px-8 text-white flex-shrink-0">
+      <div className="flex items-center gap-12">
+        {/* Logo */}
+        <div className="bg-white text-[#0B1D40] rounded-full px-4 py-1.5 flex items-center gap-2 font-bold text-lg select-none">
+          <span className="w-5 h-5 flex items-center justify-center bg-[#0B1D40] text-white rounded-full text-xs">S</span>
+          STACKLY
+        </div>
+
+        {/* Navigation */}
+        <nav className="hidden xl:flex items-center gap-8 text-sm font-medium">
+          <a href="#" className="hover:text-blue-200" onClick={(e) => { e.preventDefault(); alert("Navigating to Home"); }}>Home</a>
+          <a href="#" className="hover:text-blue-200" onClick={(e) => { e.preventDefault(); alert("Navigating to About Us"); }}>About Us</a>
+          <a href="#" className="flex items-center gap-1 hover:text-blue-200" onClick={(e) => { e.preventDefault(); alert("Opening Products dropdown"); }}>
+            Our Products <ChevronDown className="w-4 h-4 ml-1 opacity-70" />
+          </a>
+          <a href="#" className="flex items-center gap-1 hover:text-blue-200" onClick={(e) => { e.preventDefault(); alert("Opening Categories dropdown"); }}>
+            Categories <ChevronDown className="w-4 h-4 ml-1 opacity-70" />
+          </a>
+          <a href="#" className="hover:text-blue-200" onClick={(e) => { e.preventDefault(); alert("Navigating to Contact"); }}>Contact</a>
+        </nav>
+      </div>
+
+      {/* Right Actions */}
+      <div className="flex items-center gap-3 md:gap-6">
+        <button 
+          className="flex items-center justify-center gap-2 border border-white/30 rounded-full p-2 sm:px-5 sm:py-2 text-sm hover:bg-white/10 transition-colors"
+          onClick={() => alert("Your cart is empty.")}
+          title="Cart"
+        >
+          <ShoppingCart className="w-4 h-4" />
+          <span className="hidden sm:inline">Cart</span>
+        </button>
+        <button 
+          className="w-9 h-9 bg-white text-black rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
+          onClick={() => alert("Search functionality coming soon!")}
+        >
+          <Search className="w-4 h-4" />
+        </button>
+        <button 
+          className="xl:hidden w-9 h-9 bg-transparent border border-white/30 text-white rounded-md flex items-center justify-center hover:bg-white/10 transition-colors"
+          onClick={() => setIsMobileMenuOpen(true)}
+        >
+          <MenuIcon className="w-5 h-5" />
+        </button>
+        <div 
+          className="w-10 h-10 rounded-full bg-blue-300 overflow-hidden border-2 border-[#0B1D40] shadow-sm cursor-pointer hover:border-blue-400 transition"
+          onClick={() => alert("Opening user profile settings")}
+        >
+          <img src="https://i.pravatar.cc/150?u=a042581f4e29026704d" alt="User Avatar" className="w-full h-full object-cover" />
+        </div>
+      </div>
+
+      {/* Mobile Drawer Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 z-[60] xl:hidden transition-opacity"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          {/* Drawer Menu */}
+          <div 
+            className="absolute right-0 top-0 bottom-0 w-[260px] bg-[#0B1D40] shadow-2xl flex flex-col pt-6 px-6 transform transition-transform duration-300 translate-x-0"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-8 border-b border-[#1A315E] pb-4">
+              <span className="font-bold text-lg text-white">Menu</span>
+              <button 
+                className="text-gray-300 hover:text-white p-1 rounded transition"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <nav className="flex flex-col gap-5 text-base font-medium text-white">
+              <a href="#" className="hover:text-blue-200 transition" onClick={(e) => { e.preventDefault(); handleNavClick("Navigating to Home"); }}>Home</a>
+              <a href="#" className="hover:text-blue-200 transition" onClick={(e) => { e.preventDefault(); handleNavClick("Navigating to About Us"); }}>About Us</a>
+              <a href="#" className="flex items-center justify-between hover:text-blue-200 transition group" onClick={(e) => { e.preventDefault(); handleNavClick("Opening Products dropdown"); }}>
+                Our Products <ChevronDown className="w-4 h-4 opacity-50 group-hover:opacity-100 transition" />
+              </a>
+              <a href="#" className="flex items-center justify-between hover:text-blue-200 transition group" onClick={(e) => { e.preventDefault(); handleNavClick("Opening Categories dropdown"); }}>
+                Categories <ChevronDown className="w-4 h-4 opacity-50 group-hover:opacity-100 transition" />
+              </a>
+              <a href="#" className="hover:text-blue-200 transition" onClick={(e) => { e.preventDefault(); handleNavClick("Navigating to Contact"); }}>Contact</a>
+            </nav>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+}
+
+/* --- LeftSidebar.tsx --- */
+
+
+interface LeftSidebarProps {
+  onAddBlock: (type: BlockType) => void;
+}
+
+function LeftSidebar({ onAddBlock }: LeftSidebarProps) {
+  const [activeTab, setActiveTab] = useState<'blocks' | 'pages'>('blocks');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sections, setSections] = useState({
+    basic: true,
+    media: false,
+    layout: false
+  });
+
+  const toggleSection = (section: keyof typeof sections) => {
+    setSections(prev => ({ ...prev, [section]: !prev[section] }));
+  };
+
+  const matchesSearch = (text: string) => {
+    return text.toLowerCase().includes(searchQuery.toLowerCase());
+  };
+
+  return (
+    <aside className="w-[240px] bg-[#0B1D40] flex flex-col flex-shrink-0 text-white border-r border-[#152B52]">
+      {/* Tabs */}
+      <div className="flex px-6 pt-6 border-b border-[#1A315E]">
+        <button
+          className={`flex-1 pb-3 text-sm font-semibold border-b-2 transition ${activeTab === 'blocks' ? 'border-blue-500 text-white' : 'text-gray-400 hover:text-gray-200 border-transparent'}`}
+          onClick={() => setActiveTab('blocks')}
+        >
+          Blocks
+        </button>
+        <div className="w-[1px] h-4 bg-[#1A315E] mx-2 self-center"></div>
+        <button
+          className={`flex-1 pb-3 text-sm font-semibold border-b-2 transition ${activeTab === 'pages' ? 'border-blue-500 text-white' : 'text-gray-400 hover:text-gray-200 border-transparent'}`}
+          onClick={() => setActiveTab('pages')}
+        >
+          Pages
+        </button>
+      </div>
+
+      <div className="p-5 flex-1 overflow-y-auto w-full">
+        {activeTab === 'blocks' ? (
+          <>
+            {/* Search */}
+            <div className="relative mb-6">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+              <input
+                type="text"
+                placeholder="Search Blocks"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-white text-gray-800 rounded-full py-2 pl-9 pr-10 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <Mic className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-gray-700 cursor-pointer" />
+            </div>
+
+            {/* Accordion List */}
+            <div className="space-y-4">
+              {/* Basic Blocks */}
+              <div>
+                <button
+                  className="w-full flex items-center justify-between text-sm mb-4 font-medium"
+                  onClick={() => toggleSection('basic')}
+                >
+                  Basic Blocks
+                  {sections.basic ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
+                </button>
+                {sections.basic && (
+                  <>
+                    <div className="grid grid-cols-3 gap-3 mb-3">
+                      {matchesSearch('Text') && (
+                        <div
+                          onClick={() => onAddBlock('text')}
+                          className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                        >
+                          <Type className="w-5 h-5 text-gray-500 mb-1" />
+                          Text
+                        </div>
+                      )}
+                      {matchesSearch('Images') && (
+                        <div
+                          onClick={() => onAddBlock('image')}
+                          className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                        >
+                          <ImageIcon className="w-5 h-5 text-gray-500 mb-1" />
+                          Images
+                        </div>
+                      )}
+                      {matchesSearch('Button') && (
+                        <div
+                          onClick={() => onAddBlock('button')}
+                          className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer ring-2 ring-blue-500 ring-offset-1 ring-offset-[#0B1D40] hover:bg-white transition"
+                        >
+                          <MousePointerSquareDashed className="w-5 h-5 text-gray-500 mb-1" />
+                          Button
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Active Tool Sub-options */}
+                    <div className="flex bg-white rounded overflow-hidden text-xs mb-6">
+                      <button
+                        className="flex-1 bg-blue-600 hover:bg-blue-700 transition-colors text-white py-2 font-medium"
+                        onClick={() => alert("Showing all Basic tools")}
+                      >
+                        All Basic
+                      </button>
+                      <button
+                        className="flex-1 text-gray-700 hover:bg-gray-100 transition-colors py-2 font-medium text-center relative border-l border-gray-200"
+                        onClick={() => alert("Loading next tools layout")}
+                      >
+                        Next
+                        <div className="absolute top-0 right-0 w-0 h-0 border-t-[8px] border-r-[8px] border-t-white border-r-transparent"></div>
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Media Blocks */}
+              <div>
+                <button
+                  className="w-full flex items-center justify-between text-sm mb-4 font-medium opacity-90"
+                  onClick={() => toggleSection('media')}
+                >
+                  Basic Blocks
+                  {sections.media ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
+                </button>
+                {sections.media && (
+                  <div className="grid grid-cols-3 gap-3 mb-6">
+                    {matchesSearch('Videos') && (
+                      <div
+                        onClick={() => onAddBlock('video')}
+                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                      >
+                        <MonitorPlay className="w-5 h-5 text-gray-500 mb-1" />
+                        Videos
+                      </div>
+                    )}
+                    {matchesSearch('Cards') && (
+                      <div
+                        onClick={() => onAddBlock('card')}
+                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                      >
+                        <Video className="w-5 h-5 text-gray-500 mb-1" />
+                        Cards
+                      </div>
+                    )}
+                    {matchesSearch('Divider') && (
+                      <div
+                        onClick={() => onAddBlock('divider')}
+                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                      >
+                        <Minus className="w-5 h-5 text-gray-500 mb-1" />
+                        Divider
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Layout Blocks */}
+              <div>
+                <button
+                  className="w-full flex items-center justify-between text-sm mb-4 font-medium opacity-90"
+                  onClick={() => toggleSection('layout')}
+                >
+                  Layout Blocks
+                  {sections.layout ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
+                </button>
+                {sections.layout && (
+                  <div className="grid grid-cols-3 gap-3">
+                    {matchesSearch('Section') && (
+                      <div
+                        onClick={() => onAddBlock('section')}
+                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                      >
+                        <LayoutTemplate className="w-5 h-5 text-gray-500 mb-1" />
+                        Section
+                      </div>
+                    )}
+                    {matchesSearch('Columns') && (
+                      <div
+                        onClick={() => onAddBlock('columns')}
+                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                      >
+                        <Columns className="w-5 h-5 text-gray-500 mb-1" />
+                        Columns
+                      </div>
+                    )}
+                    {matchesSearch('Header') && (
+                      <div
+                        onClick={() => onAddBlock('header')}
+                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                      >
+                        <Heading className="w-5 h-5 text-gray-500 mb-1" />
+                        Header
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+            </div>
+          </>
+        ) : (
+          <div className="flex flex-col items-center justify-center h-full text-gray-400 text-center gap-4 px-4 pt-10">
+            <LayoutTemplate className="w-12 h-12 text-gray-600 opacity-50" />
+            <div>
+              <p className="font-semibold text-gray-300">Pages Manager</p>
+              <p className="text-xs mt-2">Create new layouts, route domains, and manage SEO links here.</p>
+            </div>
+            <button
+              className="mt-4 px-4 py-2 border border-gray-600 rounded-md text-xs hover:bg-gray-800 transition"
+              onClick={() => alert("Page Creation flow opened.")}
+            >
+              + Create New Page
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="p-6">
+        <button
+          className="w-full bg-white text-gray-800 rounded py-2.5 text-sm font-semibold flex items-center justify-center gap-2 hover:bg-gray-100 transition"
+          onClick={() => alert("Help Center Modal Opened.")}
+        >
+          Help
+          <HelpCircle className="w-4 h-4" />
+        </button>
+      </div>
+    </aside>
+  );
+}
+
+/* --- RightSidebar.tsx --- */
+
+
+
+interface RightSidebarProps {
+  selectedBlock: BlockData | null;
+  onUpdateBlock: (id: string, props: any) => void;
+  onClose?: () => void;
+}
+
+function RightSidebar({ selectedBlock, onUpdateBlock }: RightSidebarProps) {
+  const props = selectedBlock?.props || {};
+  const id = selectedBlock?.id || '';
+  
+  const width = props.width || '600px';
+  const borderRadius = props.borderRadius || '18px';
+
+  const [activeTab, setActiveTab] = useState<'button' | 'styles'>('button');
+  const [showVideoSettings, setShowVideoSettings] = useState(true);
+  const [showPlay, setShowPlay] = useState(true);
+
+  const handleWidthChange = (delta: number) => {
+    let currentWidth = parseInt(width.replace(/\D/g, ''));
+    if (isNaN(currentWidth)) currentWidth = 600;
+    const newWidth = Math.max(100, currentWidth + delta); // minimum 100px
+    onUpdateBlock(id, { ...props, width: `${newWidth}px` });
+  };
+
+  return (
+    <aside className="w-[300px] bg-[#FFF3F0] flex flex-col flex-shrink-0 border-l border-orange-100 overflow-y-auto">
+      {/* Tabs */}
+      <div className="flex px-6 pt-6">
+        <button 
+          className={`flex-1 pb-4 text-base font-bold border-b-[2px] transition ${activeTab === 'button' ? 'text-[#0B1D40] border-[#0B1D40]' : 'text-[#566583] border-gray-300 hover:bg-black/5'}`}
+          onClick={() => setActiveTab('button')}
+        >
+          Button
+        </button>
+        <button 
+          className={`flex-1 pb-4 text-base font-bold border-b-[2px] transition ${activeTab === 'styles' ? 'text-[#0B1D40] border-[#0B1D40]' : 'text-[#566583] border-gray-300 hover:bg-black/5'}`}
+          onClick={() => setActiveTab('styles')}
+        >
+          Styles
+        </button>
+      </div>
+
+      <div className="px-6 py-6 space-y-6 flex-1 overflow-y-auto">
+        {activeTab === 'button' ? (
+          <>
+            {/* Settings Accordion Header */}
+            <button 
+              className="w-full flex items-center justify-between text-[15px] font-bold text-[#0B1D40] hover:bg-black/5 p-1 rounded -ml-1 transition"
+              onClick={() => setShowVideoSettings(!showVideoSettings)}
+            >
+              <span>Video Settings</span>
+              <ChevronDown className={`w-4 h-4 text-gray-600 transition-transform ${showVideoSettings ? '' : '-rotate-90'}`} />
+            </button>
+
+            {showVideoSettings && (
+              <div className="space-y-6 pt-2">
+                {/* Cover Image */}
+        <div>
+          <h4 className="text-[#0B1D40] text-[15px] font-bold mb-3">Cover image</h4>
+          <div className="relative rounded-lg overflow-hidden h-[120px] bg-slate-300 border border-gray-200">
+             <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=600&h=400" className="w-full h-full object-cover" alt="Cover" />
+              <div 
+                className="absolute inset-0 flex items-center justify-center cursor-pointer hover:bg-black/20 transition group"
+                onClick={() => alert("Upload dialog would appear to replace image")}
+              >
+                <div className="w-10 h-10 rounded-full border-2 border-white flex items-center justify-center bg-black/10 backdrop-blur-[2px] group-hover:bg-black/30">
+                  <Play className="w-4 h-4 text-white fill-white ml-0.5" />
+                </div>
+              </div>
+          </div>
+        </div>
+
+                {/* Width */}
+                <div>
+                  <h4 className="text-[#0B1D40] text-[15px] font-bold mb-3">Width</h4>
+                  <div className="w-full border border-gray-300 bg-white rounded-lg flex items-center justify-between overflow-hidden focus-within:border-blue-500 transition-colors">
+                    <input 
+                      type="text" 
+                      className="flex-1 px-4 py-2.5 text-[15px] text-center text-[#0B1D40] font-bold border-r border-gray-200 focus:outline-none"
+                      value={width}
+                      onChange={(e) => onUpdateBlock(id, { ...props, width: e.target.value })}
+                    />
+                    <button className="px-3 md:px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-500 flex-shrink-0 focus:outline-none">
+                      <ChevronDown className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Play Controls */}
+            <div className="pt-2">
+               <button 
+                 className="w-full flex items-center justify-between text-[15px] font-bold text-[#0B1D40] mb-4 hover:bg-black/5 p-1 rounded -ml-1 transition"
+                 onClick={() => setShowPlay(!showPlay)}
+               >
+                  <span>Play</span>
+                  <ChevronDown className={`w-4 h-4 text-gray-600 transition-transform ${showPlay ? '' : '-rotate-90'}`} />
+               </button>
+
+               {showPlay && (
+                 <>
+                   <div className="flex items-center gap-3">
+              <button className="w-8 h-8 rounded-full bg-[#0B1D40] text-white flex items-center justify-center shadow-sm hover:bg-[#152B52]">
+                <ChevronDown className="w-4 h-4 rotate-90" />
+              </button>
+              
+              <span className="text-gray-400 font-bold text-lg leading-none">+</span>
+              
+                   <div className="flex items-center gap-4 px-2">
+                      {/* Replaced slider with an empty gap or just removing the element */}
+                   </div>
+
+                   <button 
+                     className="w-8 h-8 rounded-full bg-[#0B1D40] text-white flex items-center justify-center shadow-sm hover:bg-[#152B52]"
+                     onClick={() => alert("Forward mapped!")}
+                   >
+                     <ChevronDown className="w-4 h-4 -rotate-90" />
+                   </button>
+                </div>
+
+                <div className="mt-6 w-full border border-gray-300 bg-transparent rounded-xl flex items-center justify-between px-5 py-2 hover:bg-black/5 transition-colors">
+                  <button 
+                    className="text-gray-500 hover:text-[#0B1D40] font-medium text-xl leading-none flex items-center justify-center"
+                    onClick={() => handleWidthChange(-20)}
+                    title="Decrease Width"
+                  >
+                    –
+                  </button>
+                  <button 
+                    className="text-gray-500 hover:text-[#0B1D40] font-medium text-[22px] leading-none flex items-center justify-center"
+                    onClick={() => handleWidthChange(20)}
+                    title="Increase Width"
+                  >
+                    +
+                  </button>
+                  <button 
+                    className="text-gray-500 hover:text-[#0B1D40] font-medium leading-none flex items-center justify-center"
+                    onClick={() => alert("Flow layout execution.")}
+                  >
+                    <span className="text-lg">→</span>
+                  </button>
+                  <button 
+                    className="text-gray-500 hover:text-[#0B1D40] flex items-center justify-center"
+                    onClick={() => onUpdateBlock(id, { ...props, width: '100%' })}
+                    title="Maximize Width"
+                  >
+                    <Maximize className="w-[18px] h-[18px]" />
+                  </button>
+                </div>
+              </>
+             )}
+            </div>
+          </>
+        ) : (
+          <div className="space-y-6 pt-2">
+            {/* Border Radius moved to Styles tab */}
+            <div>
+              <h4 className="text-[#0B1D40] text-[15px] font-bold mb-3">Border Radius</h4>
+              <div className="w-full border border-gray-300 bg-white rounded-lg flex items-center overflow-hidden focus-within:border-blue-500 transition-colors">
+                 <input 
+                   type="text" 
+                   className="w-full text-center py-2.5 text-[15px] text-[#0B1D40] font-bold focus:outline-none"
+                   value={borderRadius}
+                   onChange={(e) => onUpdateBlock(id, { ...props, borderRadius: e.target.value })}
+                 />
+              </div>
+            </div>
+            
+            <div className="text-center p-6 text-gray-400 font-medium text-sm border-2 border-dashed border-gray-200 rounded-lg">
+               More typography and color styling options coming soon in next major update.
+            </div>
+          </div>
+        )}
+      </div>
+    </aside>
+  );
+}
+
+/* --- Canvas.tsx --- */
+
+
+
+interface CanvasProps {
+  blocks: BlockData[];
+  selectedBlockId: string | null;
+  onSelectBlock: (id: string | null) => void;
+  onRemoveBlock: (id: string) => void;
+  canUndo?: boolean;
+  canRedo?: boolean;
+  onUndo?: () => void;
+  onRedo?: () => void;
+  onToggleLeft?: () => void;
+  onToggleRight?: () => void;
+}
+
+function Canvas({
+  blocks,
+  selectedBlockId,
+  onSelectBlock,
+  onRemoveBlock,
+  canUndo,
+  canRedo,
+  onUndo,
+  onRedo,
+  onToggleLeft,
+  onToggleRight
+}: CanvasProps) {
+  const renderBlockContent = (block: BlockData) => {
+    switch (block.type) {
+      case 'button':
+        return (
+          <div className="w-full pb-2">
+            <h3 className="text-[#0f3b89] font-bold text-[15px] mb-4">Video Blocks</h3>
+            {/* BUTTONS SECTION */}
+            <div
+              className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-[18px] mx-auto w-full mb-10"
+              style={{ width: (block.props.width || '100%').replace(/\s+/g, '') }}
+            >
+              <button
+                className="w-full bg-[#0f3b89] text-white py-3.5 font-bold hover:bg-[#0c2f6d] text-[15px]"
+                style={{ borderRadius: (block.props.borderRadius || '6px').replace(/\s+/g, '') }}
+              >
+                Click Me !
+              </button>
+              <button
+                className="w-full border border-gray-300 text-[#0f3b89] py-3.5 font-bold hover:bg-gray-50 text-[15px]"
+                style={{ borderRadius: (block.props.borderRadius || '6px').replace(/\s+/g, '') }}
+              >
+                Secondary Button
+              </button>
+              <button
+                className="w-full border border-gray-300 text-[#0f3b89] py-3.5 font-bold hover:bg-gray-50 text-[15px]"
+                style={{ borderRadius: (block.props.borderRadius || '6px').replace(/\s+/g, '') }}
+              >
+                Primary Button
+              </button>
+              <button
+                className="w-full border border-gray-300 text-[#0f3b89] py-3.5 font-bold hover:bg-gray-50 text-[15px]"
+                style={{ borderRadius: (block.props.borderRadius || '6px').replace(/\s+/g, '') }}
+              >
+                Outline Button
+              </button>
+            </div>
+
+            {/* TEXT LINK & VIDEOS SECTION */}
+            <h3 className="text-[#0f3b89] font-bold text-[15px] mb-4">Text Link</h3>
+            <div className="w-full h-[1px] bg-gray-200 mb-6"></div>
+            <div
+              className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-[18px] w-full"
+              style={{ width: (block.props.width || '100%').replace(/\s+/g, '') }}
+            >
+              {/* Upload Video Card */}
+              <div
+                className="border border-gray-200 bg-white flex flex-col overflow-hidden"
+                style={{ borderRadius: '4px' }}
+              >
+                <div className="relative h-[160px] w-full bg-slate-100">
+                  <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=600&h=400" className="w-full h-full object-cover" alt="Mountain" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-[42px] h-[42px] rounded-full border-[1.5px] border-white flex items-center justify-center bg-transparent backdrop-blur-[1px]">
+                      <Play className="w-[20px] h-[20px] text-white fill-white ml-[3px]" />
+                    </div>
+                  </div>
+                </div>
+                <div className="p-4 pt-5 flex-1">
+                  <h4 className="font-bold text-[#0B1D40] text-[17px] mb-2">Upload Video</h4>
+                  <p className="text-[13px] text-gray-500 font-medium">Headro custer mbee 1000%</p>
+                </div>
+              </div>
+
+              {/* Embed Video Card */}
+              <div
+                className="border border-gray-200 bg-white flex flex-col overflow-hidden"
+                style={{ borderRadius: '4px' }}
+              >
+                <div className="relative h-[160px] w-full border-b border-gray-100 flex flex-col">
+                  {/* Broken icon + Hiker top left text */}
+                  <div className="absolute top-2 left-2 flex items-center text-[14px] text-[#0B1D40] font-medium z-10">
+                    <span className="w-4 h-4 mr-1 flex items-center justify-center" aria-hidden="true">
+                      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%230B1D40'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z' /%3E%3C/svg%3E" className="w-[18px] h-[18px]" alt="" />
+                    </span>
+                    Hiker
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-[48px] h-[48px] rounded-full bg-[#E2E2E2] flex items-center justify-center">
+                      <Play className="w-[20px] h-[20px] text-white fill-white ml-1" />
+                    </div>
+                  </div>
+                </div>
+                <div className="p-4 pt-5 flex-1">
+                  <h4 className="font-bold text-[#0B1D40] text-[17px] mb-2">Embed Video</h4>
+                  <p className="text-[13px] text-gray-500 font-medium">Paste YouTube , Vimeo or custom embed Code</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      case 'video':
+        return (
+          <>
+            <h3 className="text-[#0f3b89] font-bold text-[17px] mb-5">Text Link</h3>
+            <div className="text-gray-400 py-6 flex flex-col items-center">
+              <div className="text-[17px] mb-2 font-bold capitalize">{block.type} Block</div>
+              <p className="text-sm">Properties and layout for {block.type} blocks will appear here.</p>
+            </div>
+          </>
+        );
+      default:
+        return (
+          <div className="text-gray-400 py-6 flex flex-col items-center">
+            <div className="text-[17px] mb-2 font-bold capitalize">{block.type} Block</div>
+            <p className="text-sm">Properties and layout for {block.type} blocks will appear here.</p>
+          </div>
+        );
+    }
+  };
+
+  return (
+    <main
+      className="flex-1 flex flex-col bg-[#F0F2F5] relative overflow-hidden"
+      onClick={() => onSelectBlock(null)} // Click outside to deselect
+    >
+      {/* Top Actions Bar */}
+      <div
+        className="h-[70px] bg-[#F7F8FA] border-b border-gray-200 px-3 md:px-6 flex items-center justify-between flex-shrink-0 overflow-x-auto gap-4 custom-scrollbar"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center gap-2">
+          {/* Visible on all sizes */}
+          <button className="flex items-center gap-2 text-[#0B1D40] font-bold text-[14px] md:text-[15px] hover:bg-gray-100 py-1.5 px-2 md:px-3 rounded transition whitespace-nowrap">
+            My Website
+            <ChevronDown className="w-4 h-4 text-gray-600" />
+          </button>
+        </div>
+
+        <div className="flex items-center gap-2 md:gap-3">
+          {/* Visible on all sizes */}
+          <div className="flex border border-gray-300 bg-white rounded-md overflow-hidden shadow-sm flex-shrink-0">
+            <button
+              className={`px-2.5 md:px-3.5 py-1.5 md:py-2 ${canUndo ? 'text-gray-600 hover:bg-gray-50 cursor-pointer' : 'text-gray-300 cursor-not-allowed'} border-r border-gray-300`}
+              onClick={onUndo}
+              disabled={!canUndo}
+              title="Undo"
+            >
+              <Undo2 className="w-[16px] md:w-[18px] h-[16px] md:h-[18px]" strokeWidth={1.5} />
+            </button>
+            <button
+              className={`px-2.5 md:px-3.5 py-1.5 md:py-2 ${canRedo ? 'text-gray-600 hover:bg-gray-50 cursor-pointer' : 'text-gray-300 cursor-not-allowed'}`}
+              onClick={onRedo}
+              disabled={!canRedo}
+              title="Redo"
+            >
+              <Redo2 className="w-[16px] md:w-[18px] h-[16px] md:h-[18px]" strokeWidth={1.5} />
+            </button>
+          </div>
+
+          {/* Visible on all sizes */}
+          <button
+            className="border border-gray-300 bg-white text-[13px] md:text-[14px] font-bold px-2.5 lg:px-4 py-1.5 md:py-2 rounded-md text-[#0B1D40] hover:bg-gray-50 flex items-center justify-center gap-2 shadow-sm whitespace-nowrap"
+            onClick={() => alert("Draft saved locally!")}
+            title="Save Draft"
+          >
+            <Save className="w-[16px] h-[16px] text-gray-600 lg:hidden" strokeWidth={2} />
+            <span className="hidden lg:inline">Save Draft</span>
+          </button>
+          <button
+            className="border border-gray-300 bg-white text-[13px] md:text-[14px] font-bold px-2.5 lg:px-3 py-1.5 md:py-2 rounded-md text-[#0B1D40] hover:bg-gray-50 flex items-center justify-center gap-2 shadow-sm whitespace-nowrap"
+            onClick={() => alert("Preview mode not yet implemented.")}
+            title="Preview"
+          >
+            <Eye className="w-[16px] h-[16px] text-gray-600" strokeWidth={2} />
+            <span className="hidden lg:inline">Preview</span>
+          </button>
+          <button
+            className="bg-[#0B1D40] text-[13px] md:text-[14px] font-bold px-2.5 lg:px-5 py-1.5 md:py-2 rounded-md text-white hover:bg-[#152B52] flex items-center justify-center gap-2 shadow-[0_2px_4px_rgba(11,29,64,0.3)] whitespace-nowrap"
+            onClick={() => alert("Publish sequence initiated!")}
+            title="Publish"
+          >
+            <span className="hidden lg:inline">Publish</span>
+            <Send className="w-[14px] h-[14px]" strokeWidth={2} />
+          </button>
+        </div>
+      </div>
+
+      {/* Canvas Scroll Area */}
+      <div className="flex-1 overflow-y-auto p-8 flex flex-col items-center gap-6">
+        {blocks.length === 0 ? (
+          <div
+            className="w-full max-w-[850px] bg-white border border-gray-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)] rounded-[5px] flex flex-col cursor-pointer hover:border-blue-300"
+          >
+            {/* Canvas Header */}
+            <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-white rounded-t-[5px]">
+              <h2 className="text-[#0B1D40] font-bold text-[18px] capitalize">Button Blocks</h2>
+              <button className="text-red-500 hover:bg-red-50 p-1.5 rounded opacity-50 cursor-not-allowed">
+                <X className="w-[18px] h-[18px]" strokeWidth={2.5} />
+              </button>
+            </div>
+
+            {/* Block Content Region */}
+            <div className="p-8 pb-10 flex flex-col items-start w-full relative">
+              {renderBlockContent({ id: 'default', type: 'button', props: {} })}
+            </div>
+          </div>
+        ) : (
+          blocks.map(block => {
+            const isSelected = selectedBlockId === block.id;
+
+            return (
+              <div
+                key={block.id}
+                className={`w-full max-w-[850px] bg-white border border-gray-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)] rounded-[5px] flex flex-col cursor-pointer ${isSelected ? 'ring-2 ring-blue-500 border-blue-500' : 'hover:border-blue-300'}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onSelectBlock(block.id);
+                }}
+              >
+                {/* Canvas Header */}
+                <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-white rounded-t-[5px]">
+                  <h2 className="text-[#0B1D40] font-bold text-[18px] capitalize">{block.type} Blocks</h2>
+                  <button
+                    className="text-red-500 hover:bg-red-50 p-1.5 rounded"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onRemoveBlock(block.id);
+                    }}
+                  >
+                    <X className="w-[18px] h-[18px]" strokeWidth={2.5} />
+                  </button>
+                </div>
+
+                {/* Block Content Region */}
+                <div className="p-8 pb-10 flex flex-col items-start w-full relative">
+                  {renderBlockContent(block)}
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+    </main>
+  );
+}
+
+/* --- page.tsx --- */
+
+
+
+
+
+
+
+
+
+function Page() {
+  const [blocks, setBlocks] = useState<BlockData[]>([]);
+  const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
+  
+  // Mobile Responsiveness Sidebars
+  const [isLeftOpen, setIsLeftOpen] = useState(false);
+  const [isRightOpen, setIsRightOpen] = useState(false);
+  
+  // History tracking
+  const [pastStates, setPastStates] = useState<BlockData[][]>([]);
+  const [futureStates, setFutureStates] = useState<BlockData[][]>([]);
+
+  const pushState = (newBlocks: BlockData[]) => {
+    setPastStates([...pastStates, blocks]);
+    setFutureStates([]);
+    setBlocks(newBlocks);
+  };
+
+  const undo = () => {
+    if (pastStates.length === 0) return;
+    const previous = pastStates[pastStates.length - 1];
+    setFutureStates([blocks, ...futureStates]);
+    setPastStates(pastStates.slice(0, pastStates.length - 1));
+    setBlocks(previous);
+  };
+
+  const redo = () => {
+    if (futureStates.length === 0) return;
+    const next = futureStates[0];
+    setPastStates([...pastStates, blocks]);
+    setFutureStates(futureStates.slice(1));
+    setBlocks(next);
+  };
+
+  const handleAddBlock = (type: BlockType) => {
+    const newBlock: BlockData = {
+      id: Math.random().toString(36).substr(2, 9),
+      type,
+      props: {
+        width: '600 px',
+        borderRadius: '18 px'
+      }
+    };
+    pushState([...blocks, newBlock]);
+    setSelectedBlockId(newBlock.id);
+  };
+
+  const handleRemoveBlock = (id: string) => {
+    pushState(blocks.filter(b => b.id !== id));
+    if (selectedBlockId === id) {
+      setSelectedBlockId(null);
+    }
+  };
+
+  const handleUpdateBlock = (id: string, newProps: any) => {
+    pushState(blocks.map(b => 
+      b.id === id ? { ...b, props: { ...b.props, ...newProps } } : b
+    ));
+  };
+
+  return (
+    <div className="flex flex-col h-screen overflow-hidden bg-[#F0F2F5] font-sans">
+      <Header />
+      <div className="flex flex-1 h-[calc(100vh-80px)] relative w-full overflow-hidden">
+        
+        {/* Mobile Edge Toggle Left */}
+        <button 
+          onClick={() => setIsLeftOpen(!isLeftOpen)}
+          className={`fixed top-1/2 -translate-y-1/2 z-40 bg-white border border-gray-300 text-gray-600 rounded-r-md p-1.5 shadow-md flex items-center justify-center transition-all duration-300 lg:hidden ${isLeftOpen ? 'left-[240px]' : 'left-0'}`}
+        >
+          {isLeftOpen ? <ChevronLeft className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
+        </button>
+
+        {/* Left Sidebar overlay logic */}
+        <div className={`
+          absolute z-30 inset-y-0 left-0 bg-[#0B1D40] transition-transform duration-300 shadow-2xl lg:shadow-none
+          ${isLeftOpen ? 'translate-x-0' : '-translate-x-full'} 
+          lg:relative lg:translate-x-0 lg:flex
+        `}>
+          <LeftSidebar onAddBlock={(type) => { handleAddBlock(type); setIsLeftOpen(false); }} />
+        </div>
+
+        {/* Mobile Backdrop for Left Sidebar */}
+        {isLeftOpen && (
+           <div 
+             className="absolute inset-0 bg-black/40 z-20 xl:hidden" 
+             onClick={() => setIsLeftOpen(false)}
+           />
+        )}
+        
+        <Canvas 
+          blocks={blocks} 
+          selectedBlockId={selectedBlockId} 
+          onSelectBlock={setSelectedBlockId}
+          onRemoveBlock={handleRemoveBlock}
+          canUndo={pastStates.length > 0}
+          canRedo={futureStates.length > 0}
+          onUndo={undo}
+          onRedo={redo}
+          onToggleLeft={() => setIsLeftOpen(!isLeftOpen)}
+          onToggleRight={() => setIsRightOpen(!isRightOpen)}
+        />
+        
+        {/* Mobile Backdrop for Right Sidebar */}
+        {isRightOpen && (
+           <div 
+             className="absolute inset-0 bg-black/40 z-20 xl:hidden" 
+             onClick={() => setIsRightOpen(false)}
+           />
+        )}
+
+        {/* Mobile Edge Toggle Right */}
+        <button 
+          onClick={() => setIsRightOpen(!isRightOpen)}
+          className={`fixed top-1/2 -translate-y-1/2 z-40 bg-white border border-gray-300 text-gray-600 rounded-l-md p-1.5 shadow-md flex items-center justify-center transition-all duration-300 xl:hidden ${isRightOpen ? 'right-[300px]' : 'right-0'}`}
+        >
+          {isRightOpen ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
+        </button>
+
+        {/* Right Sidebar overlay logic */}
+        <div className={`
+          absolute z-30 inset-y-0 right-0 h-full bg-[#FFF3F0] transition-transform duration-300 shadow-2xl lg:shadow-none
+          ${isRightOpen ? 'translate-x-0' : 'translate-x-[300px]'}
+          xl:relative xl:translate-x-0 xl:flex
+        `}>
+          <RightSidebar 
+            selectedBlock={blocks.find(b => b.id === selectedBlockId) || null} 
+            onUpdateBlock={handleUpdateBlock}
+            onClose={() => setIsRightOpen(false)}
+          />
+        </div>
+        
+      </div>
+    </div>
+  );
+}
+
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<Page />);
+  
