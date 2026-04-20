@@ -39,25 +39,25 @@ export default function Canvas({
               style={{ width: (block.props.width || '100%').replace(/\s+/g, '') }}
             >
               <button
-                className="w-full bg-[#0f3b89] text-white py-3.5 font-bold hover:bg-[#0c2f6d] text-[15px]"
+                className="w-full bg-[#0f3b89] text-white py-3.5 font-bold hover:bg-[#0c2f6d] text-[15px] transition-all duration-300 hover:-translate-y-[2px] hover:shadow-lg active:scale-[0.98]"
                 style={{ borderRadius: (block.props.borderRadius || '6px').replace(/\s+/g, '') }}
               >
                 Click Me !
               </button>
               <button
-                className="w-full border border-gray-300 text-[#0f3b89] py-3.5 font-bold hover:bg-gray-50 text-[15px]"
+                className="w-full border border-gray-300 text-[#0f3b89] py-3.5 font-bold hover:bg-gray-50 text-[15px] transition-all duration-300 hover:-translate-y-[2px] hover:shadow-md active:scale-[0.98]"
                 style={{ borderRadius: (block.props.borderRadius || '6px').replace(/\s+/g, '') }}
               >
                 Secondary Button
               </button>
               <button
-                className="w-full border border-gray-300 text-[#0f3b89] py-3.5 font-bold hover:bg-gray-50 text-[15px]"
+                className="w-full border border-gray-300 text-[#0f3b89] py-3.5 font-bold hover:bg-gray-50 text-[15px] transition-all duration-300 hover:-translate-y-[2px] hover:shadow-md active:scale-[0.98]"
                 style={{ borderRadius: (block.props.borderRadius || '6px').replace(/\s+/g, '') }}
               >
                 Primary Button
               </button>
               <button
-                className="w-full border border-gray-300 text-[#0f3b89] py-3.5 font-bold hover:bg-gray-50 text-[15px]"
+                className="w-full border border-gray-300 text-[#0f3b89] py-3.5 font-bold hover:bg-gray-50 text-[15px] transition-all duration-300 hover:-translate-y-[2px] hover:shadow-md active:scale-[0.98]"
                 style={{ borderRadius: (block.props.borderRadius || '6px').replace(/\s+/g, '') }}
               >
                 Outline Button
@@ -73,44 +73,44 @@ export default function Canvas({
             >
               {/* Upload Video Card */}
               <div
-                className="border border-gray-200 bg-white flex flex-col overflow-hidden"
+                className="border border-gray-200 bg-white flex flex-col overflow-hidden cursor-pointer group transition-all duration-300 hover:-translate-y-1 hover:shadow-xl relative"
                 style={{ borderRadius: '4px' }}
               >
-                <div className="relative h-[160px] w-full bg-slate-100">
-                  <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=600&h=400" className="w-full h-full object-cover" alt="Mountain" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-[42px] h-[42px] rounded-full border-[1.5px] border-white flex items-center justify-center bg-transparent backdrop-blur-[1px]">
+                <div className="relative h-[160px] w-full bg-slate-100 overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=600&h=400" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Mountain" />
+                  <div className="absolute inset-0 flex items-center justify-center transition-colors duration-300 group-hover:bg-black/10">
+                    <div className="w-[42px] h-[42px] rounded-full border-[1.5px] border-white flex items-center justify-center bg-transparent backdrop-blur-[1px] transition-transform duration-300 group-hover:scale-110">
                       <Play className="w-[20px] h-[20px] text-white fill-white ml-[3px]" />
                     </div>
                   </div>
                 </div>
-                <div className="p-4 pt-5 flex-1">
-                  <h4 className="font-bold text-[#0B1D40] text-[17px] mb-2">Upload Video</h4>
+                <div className="p-4 pt-5 flex-1 transition-colors duration-300 group-hover:bg-blue-50/50">
+                  <h4 className="font-bold text-[#0B1D40] text-[17px] mb-2 transition-colors duration-300 group-hover:text-blue-700">Upload Video</h4>
                   <p className="text-[13px] text-gray-500 font-medium">Headro custer mbee 1000%</p>
                 </div>
               </div>
 
               {/* Embed Video Card */}
               <div
-                className="border border-gray-200 bg-white flex flex-col overflow-hidden"
+                className="border border-gray-200 bg-white flex flex-col overflow-hidden cursor-pointer group transition-all duration-300 hover:-translate-y-1 hover:shadow-xl relative"
                 style={{ borderRadius: '4px' }}
               >
-                <div className="relative h-[160px] w-full border-b border-gray-100 flex flex-col">
+                <div className="relative h-[160px] w-full border-b border-gray-100 flex flex-col bg-gray-50 transition-colors duration-300 group-hover:bg-gray-100 overflow-hidden">
                   {/* Broken icon + Hiker top left text */}
-                  <div className="absolute top-2 left-2 flex items-center text-[14px] text-[#0B1D40] font-medium z-10">
+                  <div className="absolute top-2 left-2 flex items-center text-[14px] text-[#0B1D40] font-medium z-10 transition-transform duration-300 group-hover:translate-x-1">
                     <span className="w-4 h-4 mr-1 flex items-center justify-center" aria-hidden="true">
                       <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%230B1D40'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z' /%3E%3C/svg%3E" className="w-[18px] h-[18px]" alt="" />
                     </span>
                     Hiker
                   </div>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-[48px] h-[48px] rounded-full bg-[#E2E2E2] flex items-center justify-center">
-                      <Play className="w-[20px] h-[20px] text-white fill-white ml-1" />
+                    <div className="w-[48px] h-[48px] rounded-full bg-[#E2E2E2] flex items-center justify-center transition-all duration-300 group-hover:bg-blue-500 group-hover:scale-110 group-hover:shadow-md">
+                      <Play className="w-[20px] h-[20px] text-white fill-white ml-1 transition-colors duration-300" />
                     </div>
                   </div>
                 </div>
-                <div className="p-4 pt-5 flex-1">
-                  <h4 className="font-bold text-[#0B1D40] text-[17px] mb-2">Embed Video</h4>
+                <div className="p-4 pt-5 flex-1 transition-colors duration-300 group-hover:bg-blue-50/50">
+                  <h4 className="font-bold text-[#0B1D40] text-[17px] mb-2 transition-colors duration-300 group-hover:text-blue-700">Embed Video</h4>
                   <p className="text-[13px] text-gray-500 font-medium">Paste YouTube , Vimeo or custom embed Code</p>
                 </div>
               </div>
@@ -144,12 +144,12 @@ export default function Canvas({
     >
       {/* Top Actions Bar */}
       <div
-        className="h-[70px] bg-[#F7F8FA] border-b border-gray-200 px-3 md:px-6 flex items-center justify-between flex-shrink-0 overflow-x-auto gap-4 custom-scrollbar"
+        className="h-[70px] bg-[#F7F8FA] border-b border-gray-200 px-3 md:px-6 flex items-center justify-between flex-shrink-0 overflow-hidden gap-4"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center gap-2">
           {/* Visible on all sizes */}
-          <button className="flex items-center gap-2 text-[#0B1D40] font-bold text-[14px] md:text-[15px] hover:bg-gray-100 py-1.5 px-2 md:px-3 rounded transition whitespace-nowrap">
+          <button className="flex items-center gap-2 text-[#0B1D40] font-bold text-[14px] md:text-[15px] hover:bg-gray-100 py-1.5 px-2 md:px-3 rounded transition-colors duration-300 whitespace-nowrap">
             My Website
             <ChevronDown className="w-4 h-4 text-gray-600" />
           </button>
@@ -159,7 +159,7 @@ export default function Canvas({
           {/* Visible on all sizes */}
           <div className="flex border border-gray-300 bg-white rounded-md overflow-hidden shadow-sm flex-shrink-0">
             <button
-              className={`px-2.5 md:px-3.5 py-1.5 md:py-2 ${canUndo ? 'text-gray-600 hover:bg-gray-50 cursor-pointer' : 'text-gray-300 cursor-not-allowed'} border-r border-gray-300`}
+              className={`px-2.5 md:px-3.5 py-1.5 md:py-2 ${canUndo ? 'text-gray-600 hover:bg-gray-50 cursor-pointer hover:text-gray-900 transition-colors duration-300' : 'text-gray-300 cursor-not-allowed'} border-r border-gray-300`}
               onClick={onUndo}
               disabled={!canUndo}
               title="Undo"
@@ -167,7 +167,7 @@ export default function Canvas({
               <Undo2 className="w-[16px] md:w-[18px] h-[16px] md:h-[18px]" strokeWidth={1.5} />
             </button>
             <button
-              className={`px-2.5 md:px-3.5 py-1.5 md:py-2 ${canRedo ? 'text-gray-600 hover:bg-gray-50 cursor-pointer' : 'text-gray-300 cursor-not-allowed'}`}
+              className={`px-2.5 md:px-3.5 py-1.5 md:py-2 ${canRedo ? 'text-gray-600 hover:bg-gray-50 cursor-pointer hover:text-gray-900 transition-colors duration-300' : 'text-gray-300 cursor-not-allowed'}`}
               onClick={onRedo}
               disabled={!canRedo}
               title="Redo"
@@ -178,7 +178,7 @@ export default function Canvas({
 
           {/* Visible on all sizes */}
           <button
-            className="border border-gray-300 bg-white text-[13px] md:text-[14px] font-bold px-2.5 lg:px-4 py-1.5 md:py-2 rounded-md text-[#0B1D40] hover:bg-gray-50 flex items-center justify-center gap-2 shadow-sm whitespace-nowrap"
+            className="border border-gray-300 bg-white text-[13px] md:text-[14px] font-bold px-2.5 lg:px-4 py-1.5 md:py-2 rounded-md text-[#0B1D40] hover:bg-gray-50 flex items-center justify-center gap-2 shadow-sm whitespace-nowrap transition-all duration-300 active:scale-95 hover:-translate-y-[1px] hover:shadow-md"
             onClick={() => alert("Draft saved locally!")}
             title="Save Draft"
           >
@@ -186,7 +186,7 @@ export default function Canvas({
             <span className="hidden lg:inline">Save Draft</span>
           </button>
           <button
-            className="border border-gray-300 bg-white text-[13px] md:text-[14px] font-bold px-2.5 lg:px-3 py-1.5 md:py-2 rounded-md text-[#0B1D40] hover:bg-gray-50 flex items-center justify-center gap-2 shadow-sm whitespace-nowrap"
+            className="border border-gray-300 bg-white text-[13px] md:text-[14px] font-bold px-2.5 lg:px-3 py-1.5 md:py-2 rounded-md text-[#0B1D40] hover:bg-gray-50 flex items-center justify-center gap-2 shadow-sm whitespace-nowrap transition-all duration-300 active:scale-95 hover:-translate-y-[1px] hover:shadow-md"
             onClick={() => alert("Preview mode not yet implemented.")}
             title="Preview"
           >
@@ -194,7 +194,7 @@ export default function Canvas({
             <span className="hidden lg:inline">Preview</span>
           </button>
           <button
-            className="bg-[#0B1D40] text-[13px] md:text-[14px] font-bold px-2.5 lg:px-5 py-1.5 md:py-2 rounded-md text-white hover:bg-[#152B52] flex items-center justify-center gap-2 shadow-[0_2px_4px_rgba(11,29,64,0.3)] whitespace-nowrap"
+            className="bg-[#0B1D40] text-[13px] md:text-[14px] font-bold px-2.5 lg:px-5 py-1.5 md:py-2 rounded-md text-white hover:bg-[#152B52] flex items-center justify-center gap-2 shadow-[0_2px_4px_rgba(11,29,64,0.3)] whitespace-nowrap transition-all duration-300 active:scale-95 hover:-translate-y-[1px] hover:shadow-lg"
             onClick={() => alert("Publish sequence initiated!")}
             title="Publish"
           >
@@ -204,11 +204,11 @@ export default function Canvas({
         </div>
       </div>
 
-      {/* Canvas Scroll Area */}
-      <div className="flex-1 overflow-y-auto p-8 flex flex-col items-center gap-6">
+      {/* Canvas Fixed Area */}
+      <div className="flex-1 overflow-hidden pt-8 px-8 pb-[40px] flex flex-col items-center gap-6">
         {blocks.length === 0 ? (
           <div
-            className="w-full max-w-[850px] bg-white border border-gray-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)] rounded-[5px] flex flex-col cursor-pointer hover:border-blue-300"
+            className="w-full max-w-[850px] bg-white border border-gray-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)] rounded-[5px] flex flex-col cursor-pointer hover:border-blue-300 max-h-full overflow-hidden"
           >
             {/* Canvas Header */}
             <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-white rounded-t-[5px]">
@@ -219,7 +219,7 @@ export default function Canvas({
             </div>
 
             {/* Block Content Region */}
-            <div className="p-8 pb-10 flex flex-col items-start w-full relative">
+            <div className="p-8 pb-10 flex flex-col items-start w-full relative flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
               {renderBlockContent({ id: 'default', type: 'button', props: {} })}
             </div>
           </div>
@@ -230,7 +230,7 @@ export default function Canvas({
             return (
               <div
                 key={block.id}
-                className={`w-full max-w-[850px] bg-white border border-gray-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)] rounded-[5px] flex flex-col cursor-pointer ${isSelected ? 'ring-2 ring-blue-500 border-blue-500' : 'hover:border-blue-300'}`}
+                className={`w-full max-w-[850px] bg-white border border-gray-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)] rounded-[5px] flex flex-col cursor-pointer ${isSelected ? 'ring-2 ring-blue-500 border-blue-500' : 'hover:border-blue-300'} max-h-full overflow-hidden`}
                 onClick={(e) => {
                   e.stopPropagation();
                   onSelectBlock(block.id);
@@ -251,7 +251,7 @@ export default function Canvas({
                 </div>
 
                 {/* Block Content Region */}
-                <div className="p-8 pb-10 flex flex-col items-start w-full relative">
+                <div className="p-8 pb-10 flex flex-col items-start w-full relative flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                   {renderBlockContent(block)}
                 </div>
               </div>

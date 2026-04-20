@@ -27,7 +27,7 @@ export default function RightSidebar({ selectedBlock, onUpdateBlock }: RightSide
   };
 
   return (
-    <aside className="w-[300px] bg-[#FFF3F0] flex flex-col flex-shrink-0 border-l border-orange-100 overflow-y-auto">
+    <aside className="w-[300px] h-full bg-[#FFF3F0] flex flex-col flex-shrink-0 border-l border-orange-100">
       {/* Tabs */}
       <div className="flex px-6 pt-6">
         <button 
@@ -44,7 +44,7 @@ export default function RightSidebar({ selectedBlock, onUpdateBlock }: RightSide
         </button>
       </div>
 
-      <div className="px-6 py-6 space-y-6 flex-1 overflow-y-auto">
+      <div className="px-6 pt-6 pb-[40px] space-y-4 flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         {activeTab === 'button' ? (
           <>
             {/* Settings Accordion Header */}
@@ -61,7 +61,7 @@ export default function RightSidebar({ selectedBlock, onUpdateBlock }: RightSide
                 {/* Cover Image */}
         <div>
           <h4 className="text-[#0B1D40] text-[15px] font-bold mb-3">Cover image</h4>
-          <div className="relative rounded-lg overflow-hidden h-[120px] bg-slate-300 border border-gray-200">
+          <div className="relative rounded-lg overflow-hidden h-[90px] bg-slate-300 border border-gray-200">
              <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=600&h=400" className="w-full h-full object-cover" alt="Cover" />
               <div 
                 className="absolute inset-0 flex items-center justify-center cursor-pointer hover:bg-black/20 transition group"
@@ -117,22 +117,22 @@ export default function RightSidebar({ selectedBlock, onUpdateBlock }: RightSide
 
                 {showPlay && (
                  <>
-                   <div className="flex items-center justify-between px-2 mt-4 mb-8">
-                     <button className="w-10 h-10 rounded-xl bg-[#0B1D40] text-white flex items-center justify-center shadow-sm hover:bg-[#152B52] transition">
+                   <div className="flex items-center justify-between px-2 mt-3 mb-5">
+                     <button className="w-10 h-10 rounded-xl bg-[#0B1D40] text-white flex items-center justify-center shadow-sm hover:bg-[#152B52] transition-all duration-200 hover:scale-105 active:scale-95 hover:shadow-md">
                        <ChevronLeft className="w-6 h-6" />
                      </button>
                      
                      <span className="text-[#0B1D40] font-semibold text-[26px] leading-none">+</span>
                      
                      <button 
-                       className="h-10 px-5 rounded-full bg-[#0B1D40] text-white flex items-center justify-center shadow-sm gap-2 hover:bg-[#152B52] transition"
+                       className="h-10 px-5 rounded-full bg-[#0B1D40] text-white flex items-center justify-center shadow-sm gap-2 hover:bg-[#152B52] transition-all duration-200 hover:scale-105 active:scale-95 hover:shadow-md"
                        onClick={() => alert("Forward mapped!")}
                      >
                        <div className="w-[12px] h-[12px] rounded-full bg-white flex-shrink-0"></div>
                        <ChevronRight className="w-6 h-6" />
                      </button>
 
-                     <button className="w-10 h-10 rounded-xl bg-[#0B1D40] text-white flex items-center justify-center shadow-sm hover:bg-[#152B52] transition">
+                     <button className="w-10 h-10 rounded-xl bg-[#0B1D40] text-white flex items-center justify-center shadow-sm hover:bg-[#152B52] transition-all duration-200 hover:scale-105 active:scale-95 hover:shadow-md">
                        <ChevronRight className="w-6 h-6" />
                      </button>
                    </div>

@@ -28,7 +28,7 @@ export default function LeftSidebar({ onAddBlock }: LeftSidebarProps) {
   };
 
   return (
-    <aside className="w-[240px] bg-[#0B1D40] flex flex-col flex-shrink-0 text-white border-r border-[#152B52]">
+    <aside className="w-[240px] h-full bg-[#0B1D40] flex flex-col flex-shrink-0 text-white border-r border-[#152B52]">
       {/* Tabs */}
       <div className="flex px-6 pt-6 border-b border-[#1A315E]">
         <button
@@ -79,7 +79,7 @@ export default function LeftSidebar({ onAddBlock }: LeftSidebarProps) {
                       {matchesSearch('Text') && (
                         <div
                           onClick={() => onAddBlock('text')}
-                          className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                          className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-md active:scale-95"
                         >
                           <Type className="w-5 h-5 text-gray-500 mb-1" />
                           Text
@@ -88,7 +88,7 @@ export default function LeftSidebar({ onAddBlock }: LeftSidebarProps) {
                       {matchesSearch('Images') && (
                         <div
                           onClick={() => onAddBlock('image')}
-                          className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                          className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-md active:scale-95"
                         >
                           <ImageIcon className="w-5 h-5 text-gray-500 mb-1" />
                           Images
@@ -97,7 +97,7 @@ export default function LeftSidebar({ onAddBlock }: LeftSidebarProps) {
                       {matchesSearch('Button') && (
                         <div
                           onClick={() => onAddBlock('button')}
-                          className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer ring-2 ring-blue-500 ring-offset-1 ring-offset-[#0B1D40] hover:bg-white transition"
+                          className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer ring-2 ring-blue-500 ring-offset-1 ring-offset-[#0B1D40] hover:bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-md active:scale-95"
                         >
                           <MousePointerSquareDashed className="w-5 h-5 text-gray-500 mb-1" />
                           Button
@@ -139,7 +139,7 @@ export default function LeftSidebar({ onAddBlock }: LeftSidebarProps) {
                     {matchesSearch('Videos') && (
                       <div
                         onClick={() => onAddBlock('video')}
-                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-md active:scale-95"
                       >
                         <MonitorPlay className="w-5 h-5 text-gray-500 mb-1" />
                         Videos
@@ -148,7 +148,7 @@ export default function LeftSidebar({ onAddBlock }: LeftSidebarProps) {
                     {matchesSearch('Cards') && (
                       <div
                         onClick={() => onAddBlock('card')}
-                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-md active:scale-95"
                       >
                         <Video className="w-5 h-5 text-gray-500 mb-1" />
                         Cards
@@ -157,7 +157,7 @@ export default function LeftSidebar({ onAddBlock }: LeftSidebarProps) {
                     {matchesSearch('Divider') && (
                       <div
                         onClick={() => onAddBlock('divider')}
-                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-md active:scale-95"
                       >
                         <Minus className="w-5 h-5 text-gray-500 mb-1" />
                         Divider
@@ -181,7 +181,7 @@ export default function LeftSidebar({ onAddBlock }: LeftSidebarProps) {
                     {matchesSearch('Section') && (
                       <div
                         onClick={() => onAddBlock('section')}
-                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-md active:scale-95"
                       >
                         <LayoutTemplate className="w-5 h-5 text-gray-500 mb-1" />
                         Section
@@ -190,7 +190,7 @@ export default function LeftSidebar({ onAddBlock }: LeftSidebarProps) {
                     {matchesSearch('Columns') && (
                       <div
                         onClick={() => onAddBlock('columns')}
-                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-md active:scale-95"
                       >
                         <Columns className="w-5 h-5 text-gray-500 mb-1" />
                         Columns
@@ -199,7 +199,7 @@ export default function LeftSidebar({ onAddBlock }: LeftSidebarProps) {
                     {matchesSearch('Header') && (
                       <div
                         onClick={() => onAddBlock('header')}
-                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-md active:scale-95"
                       >
                         <Heading className="w-5 h-5 text-gray-500 mb-1" />
                         Header

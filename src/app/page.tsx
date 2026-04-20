@@ -6,6 +6,7 @@ import Header from '../components/Header';
 import LeftSidebar from '../components/LeftSidebar';
 import RightSidebar from '../components/RightSidebar';
 import Canvas from '../components/Canvas';
+import Footer from '../components/Footer';
 import { BlockData, BlockType } from '../types';
 
 export default function Page() {
@@ -69,9 +70,9 @@ export default function Page() {
   };
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-[#F0F2F5] font-sans">
+    <div className="flex flex-col min-h-screen overflow-x-hidden bg-[#F0F2F5] font-sans">
       <Header />
-      <div className="flex flex-1 h-[calc(100vh-80px)] relative w-full overflow-hidden">
+      <div className="flex flex-1 h-[calc(100vh-80px)] flex-shrink-0 relative w-full overflow-hidden">
         
         {/* Mobile Edge Toggle Left */}
         <button 
@@ -141,6 +142,7 @@ export default function Page() {
         </div>
         
       </div>
+      <Footer />
     </div>
   );
 }

@@ -31,7 +31,7 @@
     }
   </style>
 </head>
-<body class="bg-[#F0F2F5] font-sans antialiased text-gray-900 overflow-hidden">
+<body class="bg-[#F0F2F5] font-sans antialiased text-gray-900 overflow-x-hidden">
   <div id="root"></div>
 
   <script>
@@ -46,11 +46,17 @@
     const { 
       ChevronDown, ChevronUp, ChevronRight, ChevronLeft, Undo2, Redo2, Eye, Send, X, Play, Menu, SlidersHorizontal, Save,
       ShoppingCart, Search, Mic, Type, Image: ImageIcon, MousePointerSquareDashed, 
-      Video, MonitorPlay, Minus, LayoutTemplate, Columns, Heading, HelpCircle, Maximize, LogOut
+      Video, MonitorPlay, Minus, LayoutTemplate, Columns, Heading, HelpCircle, Maximize, LogOut, Heart,
+      Mail, Users, Camera, MessageCircle, Briefcase, Globe
     } = LucideReact;
 
     // React's Menu icon shadows something if we're not careful, but wait, the component imports Menu as MenuIcon
     const MenuIcon = Menu;
+
+    // Polyfill for Next.js Link
+    const Link = ({ href, children, className, ...props }) => {
+      return <a href={href || "#"} className={className} {...props}>{children}</a>;
+    };
 
     
 /* --- index.ts --- */
@@ -77,97 +83,110 @@ function Header() {
     alert(actionText);
     setIsMobileMenuOpen(false);
   };
+
   return (
-    <header className="h-[80px] bg-[#0B1D40] flex items-center justify-between px-8 text-white flex-shrink-0">
-      <div className="flex items-center gap-12">
-        {/* Logo */}
-        <div className="flex h-8 min-w-[92px] items-center justify-center overflow-hidden rounded-[50%] bg-white px-3 sm:h-9 sm:min-w-[104px]">
-          <img
-            src="public/stackly-logo1.png"
-            alt="Stackly logo"
-            className="h-[18px] w-auto sm:h-[20px]"
-          />
-        </div>
-
-        {/* Navigation */}
-        <nav className="hidden xl:flex items-center gap-8 text-sm font-medium">
-          <a href="#" className="hover:text-blue-200" onClick={(e) => { e.preventDefault(); alert("Navigating to Home"); }}>Home</a>
-          <a href="#" className="hover:text-blue-200" onClick={(e) => { e.preventDefault(); alert("Navigating to About Us"); }}>About Us</a>
-          <a href="#" className="flex items-center gap-1 hover:text-blue-200" onClick={(e) => { e.preventDefault(); alert("Opening Products dropdown"); }}>
-            Our Products <ChevronDown className="w-4 h-4 ml-1 opacity-70" />
-          </a>
-          <a href="#" className="flex items-center gap-1 hover:text-blue-200" onClick={(e) => { e.preventDefault(); alert("Opening Categories dropdown"); }}>
-            Categories <ChevronDown className="w-4 h-4 ml-1 opacity-70" />
-          </a>
-          <a href="#" className="hover:text-blue-200" onClick={(e) => { e.preventDefault(); alert("Navigating to Contact"); }}>Contact</a>
-        </nav>
-      </div>
-
-      {/* Right Actions */}
-      <div className="flex items-center gap-3 md:gap-6">
-        <button 
-          className="flex items-center justify-center gap-2 border border-white/30 rounded-full p-2 sm:px-5 sm:py-2 text-sm hover:bg-white/10 transition-colors"
-          onClick={() => alert("Your cart is empty.")}
-          title="Cart"
-        >
-          <ShoppingCart className="w-4 h-4" />
-          <span className="hidden sm:inline">Cart</span>
-        </button>
-        <button 
-          className="w-9 h-9 bg-white text-black rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
-          onClick={() => alert("Search functionality coming soon!")}
-        >
-          <Search className="w-4 h-4" />
-        </button>
-        <button 
-          className="xl:hidden w-9 h-9 bg-transparent border border-white/30 text-white rounded-md flex items-center justify-center hover:bg-white/10 transition-colors"
-          onClick={() => setIsMobileMenuOpen(true)}
-        >
-          <MenuIcon className="w-5 h-5" />
-        </button>
-        <div 
-          className="w-10 h-10 rounded-full bg-blue-300 overflow-hidden border-2 border-[#0B1D40] shadow-sm cursor-pointer hover:border-blue-400 transition"
-          onClick={() => alert("Opening user profile settings")}
-        >
-          <img src="https://i.pravatar.cc/150?u=a042581f4e29026704d" alt="User Avatar" className="w-full h-full object-cover" />
-        </div>
-      </div>
-
-      {/* Mobile Drawer Overlay */}
-      {isMobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black/60 z-[60] xl:hidden transition-opacity"
-          onClick={() => setIsMobileMenuOpen(false)}
-        >
-          {/* Drawer Menu */}
-          <div 
-            className="absolute right-0 top-0 bottom-0 w-[260px] bg-[#0B1D40] shadow-2xl flex flex-col pt-6 px-6 transform transition-transform duration-300 translate-x-0"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between mb-8 border-b border-[#1A315E] pb-4">
-              <span className="font-bold text-lg text-white">Menu</span>
-              <button 
-                className="text-gray-300 hover:text-white p-1 rounded transition"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <X className="w-6 h-6" />
-              </button>
+    <>
+      <nav className="sticky top-0 z-50 bg-[#06224C] border-b border-white/10 px-2 md:px-12 py-3 shadow-sm">
+        <div className="flex justify-between items-center w-full h-full">
+          <div className="flex items-center gap-1 md:gap-8">
+            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="lg:hidden text-white focus:outline-none p-1 transition-all duration-300 active:scale-95 hover:bg-white/10 rounded-md" type="button" aria-label="Open mobile menu">
+              <MenuIcon className="w-6 h-6" />
+            </button>
+  
+            <div className="flex-shrink">
+              <a href="#home" tabIndex={-1} className="bg-white rounded-[60%] flex items-center justify-center shadow-md transition-all duration-300 hover:scale-105 active:scale-95 w-[75px] h-[37px] md:w-[90px] md:h-[45px] overflow-hidden">
+                <img src="./public/stackly-logo1.png" alt="Stackly Logo" className="h-full w-full object-cover object-center scale-[1.15]" decoding="async" />
+              </a>
             </div>
-            <nav className="flex flex-col gap-5 text-base font-medium text-white">
-              <a href="#" className="hover:text-blue-200 transition" onClick={(e) => { e.preventDefault(); handleNavClick("Navigating to Home"); }}>Home</a>
-              <a href="#" className="hover:text-blue-200 transition" onClick={(e) => { e.preventDefault(); handleNavClick("Navigating to About Us"); }}>About Us</a>
-              <a href="#" className="flex items-center justify-between hover:text-blue-200 transition group" onClick={(e) => { e.preventDefault(); handleNavClick("Opening Products dropdown"); }}>
-                Our Products <ChevronDown className="w-4 h-4 opacity-50 group-hover:opacity-100 transition" />
-              </a>
-              <a href="#" className="flex items-center justify-between hover:text-blue-200 transition group" onClick={(e) => { e.preventDefault(); handleNavClick("Opening Categories dropdown"); }}>
-                Categories <ChevronDown className="w-4 h-4 opacity-50 group-hover:opacity-100 transition" />
-              </a>
-              <a href="#" className="hover:text-blue-200 transition" onClick={(e) => { e.preventDefault(); handleNavClick("Navigating to Contact"); }}>Contact</a>
-            </nav>
+  
+            <div className="hidden lg:flex gap-x-4 xl:gap-x-8 text-[13px] font-bold text-white uppercase tracking-wide items-center flex-wrap justify-center">
+              <a href="#home" className="hover:text-blue-300 transition whitespace-nowrap">Home</a>
+              <a href="#404" className="hover:text-blue-300 transition whitespace-nowrap">About Us</a>
+  
+              <div className="relative dropdown-group flex items-center group">
+                <button type="button" id="products-dropdown-btn" aria-haspopup="true" aria-expanded="false" className="flex items-center gap-1.5 hover:text-blue-300 transition whitespace-nowrap text-[13px] font-bold text-white uppercase tracking-wide focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md px-1">
+                  Our Products <ChevronDown className="w-3 h-3 transition-transform group-hover:rotate-180" />
+                </button>
+                <div id="products-menu" role="menu" className="absolute left-0 top-full mt-2 w-64 bg-white rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[100] py-3 border border-gray-100 translate-y-2 group-hover:translate-y-0">
+                  <a href="#404" role="menuitem" className="block px-5 py-2.5 text-gray-800 text-[11px] font-black hover:bg-blue-50 hover:text-blue-600 border-b border-gray-50 transition-colors">PREMIUM TEMPLATES</a>
+                  <a href="#404" role="menuitem" className="block px-5 py-2.5 text-gray-800 text-[11px] font-black hover:bg-blue-50 hover:text-blue-600 border-b border-gray-50 transition-colors">UI KITS</a>
+                  <a href="#404" role="menuitem" className="block px-5 py-2.5 text-gray-800 text-[11px] font-black hover:bg-blue-50 hover:text-blue-600 border-b border-gray-50 transition-colors">WORDPRESS THEMES</a>
+                  <a href="#404" role="menuitem" className="block px-5 py-2.5 text-gray-800 text-[11px] font-black hover:bg-blue-50 hover:text-blue-600 transition-colors">FREE ASSETS</a>
+                </div>
+              </div>
+  
+              <div className="relative dropdown-group flex items-center group">
+                <button type="button" id="category-dropdown-btn" aria-haspopup="true" aria-expanded="false" className="flex items-center gap-1.5 hover:text-blue-300 transition whitespace-nowrap text-[13px] font-bold text-white uppercase tracking-wide focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md px-1">
+                  Categories <ChevronDown className="w-3 h-3 transition-transform group-hover:rotate-180" />
+                </button>
+                <div id="category-menu" role="menu" className="absolute left-0 top-full mt-2 w-64 bg-white rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[100] py-3 border border-gray-100 translate-y-2 group-hover:translate-y-0">
+                  <a href="#all-templates-wrapper" onClick={() => alert('scrollToTemplate portfolio')} role="menuitem" className="block px-5 py-2.5 text-gray-800 text-[11px] font-black hover:bg-blue-50 hover:text-blue-600 border-b border-gray-50 transition-colors">PORTFOLIO</a>
+                  <a href="#all-templates-wrapper" onClick={() => alert('scrollToTemplate ecommerce')} role="menuitem" className="block px-5 py-2.5 text-gray-800 text-[11px] font-black hover:bg-blue-50 hover:text-blue-600 border-b border-gray-50 transition-colors">STORE</a>
+                  <a href="#all-templates-wrapper" onClick={() => alert('scrollToTemplate business')} role="menuitem" className="block px-5 py-2.5 text-gray-800 text-[11px] font-black hover:bg-blue-50 hover:text-blue-600 border-b border-gray-50 transition-colors">BUSINESS</a>
+                  <a href="#all-templates-wrapper" onClick={() => alert('scrollToTemplate construction')} role="menuitem" className="block px-5 py-2.5 text-gray-800 text-[11px] font-black hover:bg-blue-50 hover:text-blue-600 border-b border-gray-50 transition-colors">CONSTRUCTION</a>
+                  <a href="#all-templates-wrapper" onClick={() => alert('scrollToTemplate fashion')} role="menuitem" className="block px-5 py-2.5 text-gray-800 text-[11px] font-black hover:bg-blue-50 hover:text-blue-600 border-b border-gray-50 transition-colors">FASHION</a>
+                  <a href="#all-templates-wrapper" onClick={() => alert('scrollToTemplate jewelry')} role="menuitem" className="block px-5 py-2.5 text-gray-800 text-[11px] font-black hover:bg-blue-50 hover:text-blue-600 transition-colors">JEWELRY</a>
+                </div>
+              </div>
+  
+              <button type="button" onClick={() => alert("openContactModal")} className="hover:text-blue-300 transition whitespace-nowrap font-bold text-[13px] uppercase tracking-wide">Contact</button>
+            </div>
+          </div>
+  
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <button onClick={() => alert("toggleCart")} className="relative flex items-center gap-1 border border-white/30 rounded-full px-2 md:px-4 py-1.5 text-white text-[10px] md:text-xs font-semibold hover:bg-white/10 transition-all duration-300 active:scale-95" type="button">
+              <ShoppingCart className="w-3 h-3 md:w-3.5 md:h-3.5" />
+              <span className="hidden sm:inline">Cart</span>
+              <span id="cartBadge" className="hidden absolute -top-1 -right-1 bg-red-500 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+            </button>
+  
+            <button onClick={() => alert("toggleWishlist")} className="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center bg-white rounded-full text-red-500 hover:bg-gray-100 transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm flex-shrink-0" type="button" aria-label="Open wishlist">
+              <Heart className="w-4 h-4" />
+            </button>
+  
+            <button onClick={() => alert("toggleSearchBar")} className="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center bg-white rounded-full text-[#06224C] hover:bg-gray-200 transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm flex-shrink-0" type="button" aria-label="Open search">
+              <Search className="w-4 h-4" />
+            </button>
+  
+            <button type="button" aria-label="User Profile" className="w-8 h-8 md:w-9 md:h-9 rounded-[60%] border-2 border-white/40 overflow-hidden cursor-pointer flex-shrink-0 relative focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-[#06224C] transition-all duration-300 hover:scale-105 active:scale-95">
+              <img src="https://i.pravatar.cc/150?u=a042581f4e29026704d" alt="User Profile Picture" className="w-full h-full object-cover block" decoding="async" />
+            </button>
           </div>
         </div>
-      )}
-    </header>
+      </nav>
+
+      {/* Mobile Drawer Overlay */}
+      <div 
+        className={`fixed inset-0 bg-black/60 z-[60] xl:hidden transition-opacity duration-300 ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        onClick={() => setIsMobileMenuOpen(false)}
+      >
+        <div 
+          className={`absolute right-0 top-0 bottom-0 w-[260px] bg-[#0B1D40] shadow-2xl flex flex-col pt-6 px-6 transform transition-transform duration-300 ease-out ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex items-center justify-between mb-8 border-b border-[#1A315E] pb-4">
+            <span className="font-bold text-lg text-white">Menu</span>
+            <button 
+              className="text-gray-300 hover:text-white p-1 rounded transition-all duration-300 hover:rotate-90 hover:scale-110 active:scale-95"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+          <nav className="flex flex-col gap-5 text-base font-medium text-white">
+            <a href="#" className="hover:text-blue-200 transition-colors duration-300" onClick={(e) => { e.preventDefault(); handleNavClick("Navigating to Home"); }}>Home</a>
+            <a href="#" className="hover:text-blue-200 transition-colors duration-300" onClick={(e) => { e.preventDefault(); handleNavClick("Navigating to About Us"); }}>About Us</a>
+            <a href="#" className="flex items-center justify-between hover:text-blue-200 transition-colors duration-300 group" onClick={(e) => { e.preventDefault(); handleNavClick("Opening Products dropdown"); }}>
+              Our Products <ChevronDown className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
+            </a>
+            <a href="#" className="flex items-center justify-between hover:text-blue-200 transition-colors duration-300 group" onClick={(e) => { e.preventDefault(); handleNavClick("Opening Categories dropdown"); }}>
+              Categories <ChevronDown className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
+            </a>
+            <button type="button" className="hover:text-blue-200 transition-colors duration-300 text-left font-bold" onClick={() => { alert("openContactModal"); setIsMobileMenuOpen(false); }}>Contact</button>
+          </nav>
+        </div>
+      </div>
+    </>
   );
 }
 
@@ -196,7 +215,7 @@ function LeftSidebar({ onAddBlock }: LeftSidebarProps) {
   };
 
   return (
-    <aside className="w-[240px] bg-[#0B1D40] flex flex-col flex-shrink-0 text-white border-r border-[#152B52]">
+    <aside className="w-[240px] h-full bg-[#0B1D40] flex flex-col flex-shrink-0 text-white border-r border-[#152B52]">
       {/* Tabs */}
       <div className="flex px-6 pt-6 border-b border-[#1A315E]">
         <button
@@ -247,7 +266,7 @@ function LeftSidebar({ onAddBlock }: LeftSidebarProps) {
                       {matchesSearch('Text') && (
                         <div
                           onClick={() => onAddBlock('text')}
-                          className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                          className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-md active:scale-95"
                         >
                           <Type className="w-5 h-5 text-gray-500 mb-1" />
                           Text
@@ -256,7 +275,7 @@ function LeftSidebar({ onAddBlock }: LeftSidebarProps) {
                       {matchesSearch('Images') && (
                         <div
                           onClick={() => onAddBlock('image')}
-                          className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                          className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-md active:scale-95"
                         >
                           <ImageIcon className="w-5 h-5 text-gray-500 mb-1" />
                           Images
@@ -265,7 +284,7 @@ function LeftSidebar({ onAddBlock }: LeftSidebarProps) {
                       {matchesSearch('Button') && (
                         <div
                           onClick={() => onAddBlock('button')}
-                          className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer ring-2 ring-blue-500 ring-offset-1 ring-offset-[#0B1D40] hover:bg-white transition"
+                          className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer ring-2 ring-blue-500 ring-offset-1 ring-offset-[#0B1D40] hover:bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-md active:scale-95"
                         >
                           <MousePointerSquareDashed className="w-5 h-5 text-gray-500 mb-1" />
                           Button
@@ -307,7 +326,7 @@ function LeftSidebar({ onAddBlock }: LeftSidebarProps) {
                     {matchesSearch('Videos') && (
                       <div
                         onClick={() => onAddBlock('video')}
-                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-md active:scale-95"
                       >
                         <MonitorPlay className="w-5 h-5 text-gray-500 mb-1" />
                         Videos
@@ -316,7 +335,7 @@ function LeftSidebar({ onAddBlock }: LeftSidebarProps) {
                     {matchesSearch('Cards') && (
                       <div
                         onClick={() => onAddBlock('card')}
-                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-md active:scale-95"
                       >
                         <Video className="w-5 h-5 text-gray-500 mb-1" />
                         Cards
@@ -325,7 +344,7 @@ function LeftSidebar({ onAddBlock }: LeftSidebarProps) {
                     {matchesSearch('Divider') && (
                       <div
                         onClick={() => onAddBlock('divider')}
-                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-md active:scale-95"
                       >
                         <Minus className="w-5 h-5 text-gray-500 mb-1" />
                         Divider
@@ -349,7 +368,7 @@ function LeftSidebar({ onAddBlock }: LeftSidebarProps) {
                     {matchesSearch('Section') && (
                       <div
                         onClick={() => onAddBlock('section')}
-                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-md active:scale-95"
                       >
                         <LayoutTemplate className="w-5 h-5 text-gray-500 mb-1" />
                         Section
@@ -358,7 +377,7 @@ function LeftSidebar({ onAddBlock }: LeftSidebarProps) {
                     {matchesSearch('Columns') && (
                       <div
                         onClick={() => onAddBlock('columns')}
-                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-md active:scale-95"
                       >
                         <Columns className="w-5 h-5 text-gray-500 mb-1" />
                         Columns
@@ -367,7 +386,7 @@ function LeftSidebar({ onAddBlock }: LeftSidebarProps) {
                     {matchesSearch('Header') && (
                       <div
                         onClick={() => onAddBlock('header')}
-                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition"
+                        className="bg-[#F3F4F6] text-gray-700 flex flex-col items-center justify-center p-3 rounded text-xs gap-1 cursor-pointer hover:bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-md active:scale-95"
                       >
                         <Heading className="w-5 h-5 text-gray-500 mb-1" />
                         Header
@@ -438,7 +457,7 @@ function RightSidebar({ selectedBlock, onUpdateBlock }: RightSidebarProps) {
   };
 
   return (
-    <aside className="w-[300px] bg-[#FFF3F0] flex flex-col flex-shrink-0 border-l border-orange-100 overflow-y-auto">
+    <aside className="w-[300px] h-full bg-[#FFF3F0] flex flex-col flex-shrink-0 border-l border-orange-100">
       {/* Tabs */}
       <div className="flex px-6 pt-6">
         <button 
@@ -455,7 +474,7 @@ function RightSidebar({ selectedBlock, onUpdateBlock }: RightSidebarProps) {
         </button>
       </div>
 
-      <div className="px-6 py-6 space-y-6 flex-1 overflow-y-auto">
+      <div className="px-6 pt-6 pb-[40px] space-y-4 flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         {activeTab === 'button' ? (
           <>
             {/* Settings Accordion Header */}
@@ -472,7 +491,7 @@ function RightSidebar({ selectedBlock, onUpdateBlock }: RightSidebarProps) {
                 {/* Cover Image */}
         <div>
           <h4 className="text-[#0B1D40] text-[15px] font-bold mb-3">Cover image</h4>
-          <div className="relative rounded-lg overflow-hidden h-[120px] bg-slate-300 border border-gray-200">
+          <div className="relative rounded-lg overflow-hidden h-[90px] bg-slate-300 border border-gray-200">
              <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=600&h=400" className="w-full h-full object-cover" alt="Cover" />
               <div 
                 className="absolute inset-0 flex items-center justify-center cursor-pointer hover:bg-black/20 transition group"
@@ -528,22 +547,22 @@ function RightSidebar({ selectedBlock, onUpdateBlock }: RightSidebarProps) {
 
                 {showPlay && (
                  <>
-                   <div className="flex items-center justify-between px-2 mt-4 mb-8">
-                     <button className="w-10 h-10 rounded-xl bg-[#0B1D40] text-white flex items-center justify-center shadow-sm hover:bg-[#152B52] transition">
+                   <div className="flex items-center justify-between px-2 mt-3 mb-5">
+                     <button className="w-10 h-10 rounded-xl bg-[#0B1D40] text-white flex items-center justify-center shadow-sm hover:bg-[#152B52] transition-all duration-200 hover:scale-105 active:scale-95 hover:shadow-md">
                        <ChevronLeft className="w-6 h-6" />
                      </button>
                      
                      <span className="text-[#0B1D40] font-semibold text-[26px] leading-none">+</span>
                      
                      <button 
-                       className="h-10 px-5 rounded-full bg-[#0B1D40] text-white flex items-center justify-center shadow-sm gap-2 hover:bg-[#152B52] transition"
+                       className="h-10 px-5 rounded-full bg-[#0B1D40] text-white flex items-center justify-center shadow-sm gap-2 hover:bg-[#152B52] transition-all duration-200 hover:scale-105 active:scale-95 hover:shadow-md"
                        onClick={() => alert("Forward mapped!")}
                      >
                        <div className="w-[12px] h-[12px] rounded-full bg-white flex-shrink-0"></div>
                        <ChevronRight className="w-6 h-6" />
                      </button>
 
-                     <button className="w-10 h-10 rounded-xl bg-[#0B1D40] text-white flex items-center justify-center shadow-sm hover:bg-[#152B52] transition">
+                     <button className="w-10 h-10 rounded-xl bg-[#0B1D40] text-white flex items-center justify-center shadow-sm hover:bg-[#152B52] transition-all duration-200 hover:scale-105 active:scale-95 hover:shadow-md">
                        <ChevronRight className="w-6 h-6" />
                      </button>
                    </div>
@@ -634,25 +653,25 @@ function Canvas({
               style={{ width: (block.props.width || '100%').replace(/\s+/g, '') }}
             >
               <button
-                className="w-full bg-[#0f3b89] text-white py-3.5 font-bold hover:bg-[#0c2f6d] text-[15px]"
+                className="w-full bg-[#0f3b89] text-white py-3.5 font-bold hover:bg-[#0c2f6d] text-[15px] transition-all duration-300 hover:-translate-y-[2px] hover:shadow-lg active:scale-[0.98]"
                 style={{ borderRadius: (block.props.borderRadius || '6px').replace(/\s+/g, '') }}
               >
                 Click Me !
               </button>
               <button
-                className="w-full border border-gray-300 text-[#0f3b89] py-3.5 font-bold hover:bg-gray-50 text-[15px]"
+                className="w-full border border-gray-300 text-[#0f3b89] py-3.5 font-bold hover:bg-gray-50 text-[15px] transition-all duration-300 hover:-translate-y-[2px] hover:shadow-md active:scale-[0.98]"
                 style={{ borderRadius: (block.props.borderRadius || '6px').replace(/\s+/g, '') }}
               >
                 Secondary Button
               </button>
               <button
-                className="w-full border border-gray-300 text-[#0f3b89] py-3.5 font-bold hover:bg-gray-50 text-[15px]"
+                className="w-full border border-gray-300 text-[#0f3b89] py-3.5 font-bold hover:bg-gray-50 text-[15px] transition-all duration-300 hover:-translate-y-[2px] hover:shadow-md active:scale-[0.98]"
                 style={{ borderRadius: (block.props.borderRadius || '6px').replace(/\s+/g, '') }}
               >
                 Primary Button
               </button>
               <button
-                className="w-full border border-gray-300 text-[#0f3b89] py-3.5 font-bold hover:bg-gray-50 text-[15px]"
+                className="w-full border border-gray-300 text-[#0f3b89] py-3.5 font-bold hover:bg-gray-50 text-[15px] transition-all duration-300 hover:-translate-y-[2px] hover:shadow-md active:scale-[0.98]"
                 style={{ borderRadius: (block.props.borderRadius || '6px').replace(/\s+/g, '') }}
               >
                 Outline Button
@@ -668,44 +687,44 @@ function Canvas({
             >
               {/* Upload Video Card */}
               <div
-                className="border border-gray-200 bg-white flex flex-col overflow-hidden"
+                className="border border-gray-200 bg-white flex flex-col overflow-hidden cursor-pointer group transition-all duration-300 hover:-translate-y-1 hover:shadow-xl relative"
                 style={{ borderRadius: '4px' }}
               >
-                <div className="relative h-[160px] w-full bg-slate-100">
-                  <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=600&h=400" className="w-full h-full object-cover" alt="Mountain" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-[42px] h-[42px] rounded-full border-[1.5px] border-white flex items-center justify-center bg-transparent backdrop-blur-[1px]">
+                <div className="relative h-[160px] w-full bg-slate-100 overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=600&h=400" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Mountain" />
+                  <div className="absolute inset-0 flex items-center justify-center transition-colors duration-300 group-hover:bg-black/10">
+                    <div className="w-[42px] h-[42px] rounded-full border-[1.5px] border-white flex items-center justify-center bg-transparent backdrop-blur-[1px] transition-transform duration-300 group-hover:scale-110">
                       <Play className="w-[20px] h-[20px] text-white fill-white ml-[3px]" />
                     </div>
                   </div>
                 </div>
-                <div className="p-4 pt-5 flex-1">
-                  <h4 className="font-bold text-[#0B1D40] text-[17px] mb-2">Upload Video</h4>
+                <div className="p-4 pt-5 flex-1 transition-colors duration-300 group-hover:bg-blue-50/50">
+                  <h4 className="font-bold text-[#0B1D40] text-[17px] mb-2 transition-colors duration-300 group-hover:text-blue-700">Upload Video</h4>
                   <p className="text-[13px] text-gray-500 font-medium">Headro custer mbee 1000%</p>
                 </div>
               </div>
 
               {/* Embed Video Card */}
               <div
-                className="border border-gray-200 bg-white flex flex-col overflow-hidden"
+                className="border border-gray-200 bg-white flex flex-col overflow-hidden cursor-pointer group transition-all duration-300 hover:-translate-y-1 hover:shadow-xl relative"
                 style={{ borderRadius: '4px' }}
               >
-                <div className="relative h-[160px] w-full border-b border-gray-100 flex flex-col">
+                <div className="relative h-[160px] w-full border-b border-gray-100 flex flex-col bg-gray-50 transition-colors duration-300 group-hover:bg-gray-100 overflow-hidden">
                   {/* Broken icon + Hiker top left text */}
-                  <div className="absolute top-2 left-2 flex items-center text-[14px] text-[#0B1D40] font-medium z-10">
+                  <div className="absolute top-2 left-2 flex items-center text-[14px] text-[#0B1D40] font-medium z-10 transition-transform duration-300 group-hover:translate-x-1">
                     <span className="w-4 h-4 mr-1 flex items-center justify-center" aria-hidden="true">
                       <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%230B1D40'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z' /%3E%3C/svg%3E" className="w-[18px] h-[18px]" alt="" />
                     </span>
                     Hiker
                   </div>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-[48px] h-[48px] rounded-full bg-[#E2E2E2] flex items-center justify-center">
-                      <Play className="w-[20px] h-[20px] text-white fill-white ml-1" />
+                    <div className="w-[48px] h-[48px] rounded-full bg-[#E2E2E2] flex items-center justify-center transition-all duration-300 group-hover:bg-blue-500 group-hover:scale-110 group-hover:shadow-md">
+                      <Play className="w-[20px] h-[20px] text-white fill-white ml-1 transition-colors duration-300" />
                     </div>
                   </div>
                 </div>
-                <div className="p-4 pt-5 flex-1">
-                  <h4 className="font-bold text-[#0B1D40] text-[17px] mb-2">Embed Video</h4>
+                <div className="p-4 pt-5 flex-1 transition-colors duration-300 group-hover:bg-blue-50/50">
+                  <h4 className="font-bold text-[#0B1D40] text-[17px] mb-2 transition-colors duration-300 group-hover:text-blue-700">Embed Video</h4>
                   <p className="text-[13px] text-gray-500 font-medium">Paste YouTube , Vimeo or custom embed Code</p>
                 </div>
               </div>
@@ -739,12 +758,12 @@ function Canvas({
     >
       {/* Top Actions Bar */}
       <div
-        className="h-[70px] bg-[#F7F8FA] border-b border-gray-200 px-3 md:px-6 flex items-center justify-between flex-shrink-0 overflow-x-auto gap-4 custom-scrollbar"
+        className="h-[70px] bg-[#F7F8FA] border-b border-gray-200 px-3 md:px-6 flex items-center justify-between flex-shrink-0 overflow-hidden gap-4"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center gap-2">
           {/* Visible on all sizes */}
-          <button className="flex items-center gap-2 text-[#0B1D40] font-bold text-[14px] md:text-[15px] hover:bg-gray-100 py-1.5 px-2 md:px-3 rounded transition whitespace-nowrap">
+          <button className="flex items-center gap-2 text-[#0B1D40] font-bold text-[14px] md:text-[15px] hover:bg-gray-100 py-1.5 px-2 md:px-3 rounded transition-colors duration-300 whitespace-nowrap">
             My Website
             <ChevronDown className="w-4 h-4 text-gray-600" />
           </button>
@@ -754,7 +773,7 @@ function Canvas({
           {/* Visible on all sizes */}
           <div className="flex border border-gray-300 bg-white rounded-md overflow-hidden shadow-sm flex-shrink-0">
             <button
-              className={`px-2.5 md:px-3.5 py-1.5 md:py-2 ${canUndo ? 'text-gray-600 hover:bg-gray-50 cursor-pointer' : 'text-gray-300 cursor-not-allowed'} border-r border-gray-300`}
+              className={`px-2.5 md:px-3.5 py-1.5 md:py-2 ${canUndo ? 'text-gray-600 hover:bg-gray-50 cursor-pointer hover:text-gray-900 transition-colors duration-300' : 'text-gray-300 cursor-not-allowed'} border-r border-gray-300`}
               onClick={onUndo}
               disabled={!canUndo}
               title="Undo"
@@ -762,7 +781,7 @@ function Canvas({
               <Undo2 className="w-[16px] md:w-[18px] h-[16px] md:h-[18px]" strokeWidth={1.5} />
             </button>
             <button
-              className={`px-2.5 md:px-3.5 py-1.5 md:py-2 ${canRedo ? 'text-gray-600 hover:bg-gray-50 cursor-pointer' : 'text-gray-300 cursor-not-allowed'}`}
+              className={`px-2.5 md:px-3.5 py-1.5 md:py-2 ${canRedo ? 'text-gray-600 hover:bg-gray-50 cursor-pointer hover:text-gray-900 transition-colors duration-300' : 'text-gray-300 cursor-not-allowed'}`}
               onClick={onRedo}
               disabled={!canRedo}
               title="Redo"
@@ -773,7 +792,7 @@ function Canvas({
 
           {/* Visible on all sizes */}
           <button
-            className="border border-gray-300 bg-white text-[13px] md:text-[14px] font-bold px-2.5 lg:px-4 py-1.5 md:py-2 rounded-md text-[#0B1D40] hover:bg-gray-50 flex items-center justify-center gap-2 shadow-sm whitespace-nowrap"
+            className="border border-gray-300 bg-white text-[13px] md:text-[14px] font-bold px-2.5 lg:px-4 py-1.5 md:py-2 rounded-md text-[#0B1D40] hover:bg-gray-50 flex items-center justify-center gap-2 shadow-sm whitespace-nowrap transition-all duration-300 active:scale-95 hover:-translate-y-[1px] hover:shadow-md"
             onClick={() => alert("Draft saved locally!")}
             title="Save Draft"
           >
@@ -781,7 +800,7 @@ function Canvas({
             <span className="hidden lg:inline">Save Draft</span>
           </button>
           <button
-            className="border border-gray-300 bg-white text-[13px] md:text-[14px] font-bold px-2.5 lg:px-3 py-1.5 md:py-2 rounded-md text-[#0B1D40] hover:bg-gray-50 flex items-center justify-center gap-2 shadow-sm whitespace-nowrap"
+            className="border border-gray-300 bg-white text-[13px] md:text-[14px] font-bold px-2.5 lg:px-3 py-1.5 md:py-2 rounded-md text-[#0B1D40] hover:bg-gray-50 flex items-center justify-center gap-2 shadow-sm whitespace-nowrap transition-all duration-300 active:scale-95 hover:-translate-y-[1px] hover:shadow-md"
             onClick={() => alert("Preview mode not yet implemented.")}
             title="Preview"
           >
@@ -789,7 +808,7 @@ function Canvas({
             <span className="hidden lg:inline">Preview</span>
           </button>
           <button
-            className="bg-[#0B1D40] text-[13px] md:text-[14px] font-bold px-2.5 lg:px-5 py-1.5 md:py-2 rounded-md text-white hover:bg-[#152B52] flex items-center justify-center gap-2 shadow-[0_2px_4px_rgba(11,29,64,0.3)] whitespace-nowrap"
+            className="bg-[#0B1D40] text-[13px] md:text-[14px] font-bold px-2.5 lg:px-5 py-1.5 md:py-2 rounded-md text-white hover:bg-[#152B52] flex items-center justify-center gap-2 shadow-[0_2px_4px_rgba(11,29,64,0.3)] whitespace-nowrap transition-all duration-300 active:scale-95 hover:-translate-y-[1px] hover:shadow-lg"
             onClick={() => alert("Publish sequence initiated!")}
             title="Publish"
           >
@@ -799,11 +818,11 @@ function Canvas({
         </div>
       </div>
 
-      {/* Canvas Scroll Area */}
-      <div className="flex-1 overflow-y-auto p-8 flex flex-col items-center gap-6">
+      {/* Canvas Fixed Area */}
+      <div className="flex-1 overflow-hidden pt-8 px-8 pb-[40px] flex flex-col items-center gap-6">
         {blocks.length === 0 ? (
           <div
-            className="w-full max-w-[850px] bg-white border border-gray-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)] rounded-[5px] flex flex-col cursor-pointer hover:border-blue-300"
+            className="w-full max-w-[850px] bg-white border border-gray-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)] rounded-[5px] flex flex-col cursor-pointer hover:border-blue-300 max-h-full overflow-hidden"
           >
             {/* Canvas Header */}
             <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-white rounded-t-[5px]">
@@ -814,7 +833,7 @@ function Canvas({
             </div>
 
             {/* Block Content Region */}
-            <div className="p-8 pb-10 flex flex-col items-start w-full relative">
+            <div className="p-8 pb-10 flex flex-col items-start w-full relative flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
               {renderBlockContent({ id: 'default', type: 'button', props: {} })}
             </div>
           </div>
@@ -825,7 +844,7 @@ function Canvas({
             return (
               <div
                 key={block.id}
-                className={`w-full max-w-[850px] bg-white border border-gray-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)] rounded-[5px] flex flex-col cursor-pointer ${isSelected ? 'ring-2 ring-blue-500 border-blue-500' : 'hover:border-blue-300'}`}
+                className={`w-full max-w-[850px] bg-white border border-gray-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)] rounded-[5px] flex flex-col cursor-pointer ${isSelected ? 'ring-2 ring-blue-500 border-blue-500' : 'hover:border-blue-300'} max-h-full overflow-hidden`}
                 onClick={(e) => {
                   e.stopPropagation();
                   onSelectBlock(block.id);
@@ -846,7 +865,7 @@ function Canvas({
                 </div>
 
                 {/* Block Content Region */}
-                <div className="p-8 pb-10 flex flex-col items-start w-full relative">
+                <div className="p-8 pb-10 flex flex-col items-start w-full relative flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                   {renderBlockContent(block)}
                 </div>
               </div>
@@ -858,7 +877,203 @@ function Canvas({
   );
 }
 
+/* --- Footer.tsx --- */
+
+
+
+function Footer() {
+  return (
+    <footer className="bg-[#051b3b] text-white flex-shrink-0 z-50 relative border-t border-[#1a315e] min-h-[113px] py-6 flex flex-col justify-center">
+      <div className="max-w-[1200px] mx-auto px-6 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-6">
+          {/* Column 1 */}
+          <div className="flex flex-col gap-4 md:col-span-1">
+            {/* TITLE */}
+            {/* <h3 className="text-white font-black text-sm uppercase tracking-wider">
+              Subscribe to our Updates
+            </h3> */}
+
+            {/* FORM */}
+            <form className="max-w-[260px] flex items-center gap-2">
+              {/* INPUT */}
+              <div className="flex-grow relative">
+                {/* Envelope Icon */}
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <input
+                  type="email"
+                  placeholder="Your email"
+                  className="w-full pl-11 pr-4 py-2.5 rounded-full bg-white text-black text-sm outline-none focus:ring-2 focus:ring-blue-400"
+                />
+              </div>
+
+              {/* SEND BUTTON */}
+              <button
+                type="submit"
+                className="text-white hover:text-blue-300 transition group flex-shrink-0"
+              >
+                <Send className="w-[18px] h-[18px] transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+              </button>
+            </form>
+
+            {/* ADDRESS */}
+            <div className="text-[13px] text-white/80 leading-relaxed space-y-1">
+              <h4 className="font-bold text-white mb-3 text-[15px]">Headquarters</h4>
+              <p>MMR COMPLEX, SALEM,</p>
+              <p>Tamil Nadu 636008</p>
+            </div>
+          </div>
+
+          {/* PRODUCT */}
+          <div className="flex flex-col gap-4">
+            <h3 className="font-bold text-white text-[15px]">Product</h3>
+            <ul className="flex flex-col gap-3 text-[13px] text-white/70">
+              <Link href="/page-not-found" className="hover:text-white cursor-pointer -mt-1 block">
+                Features
+              </Link>
+              <Link href="/page-not-found" className="hover:text-white cursor-pointer border-t border-transparent block">
+                Templates
+              </Link>
+              <Link href="/page-not-found" className="hover:text-white cursor-pointer border-t border-transparent block">
+                Pricing
+              </Link>
+              <Link href="/page-not-found" className="hover:text-white cursor-pointer border-t border-transparent block">
+                Changelog
+              </Link>
+            </ul>
+          </div>
+
+          {/* RESOURCES */}
+          <div className="flex flex-col gap-4">
+            <h3 className="font-bold text-white text-[15px]">Resources</h3>
+            <ul className="flex flex-col gap-3 text-[13px] text-white/70">
+              <Link href="/page-not-found" className="hover:text-white cursor-pointer -mt-1 block">
+                Documentation
+              </Link>
+              <Link href="/page-not-found" className="hover:text-white cursor-pointer border-t border-transparent block">
+                API Reference
+              </Link>
+              <Link href="/page-not-found" className="hover:text-white cursor-pointer border-t border-transparent block">
+                Blog
+              </Link>
+              <Link href="/page-not-found" className="hover:text-white cursor-pointer border-t border-transparent block">
+                Status
+              </Link>
+            </ul>
+          </div>
+
+          {/* COMPANY */}
+          <div className="flex flex-col gap-4">
+            <h3 className="font-bold text-white text-[15px]">Company</h3>
+            <ul className="flex flex-col gap-3 text-[13px] text-white/70">
+              <Link href="/page-not-found" className="hover:text-white cursor-pointer -mt-1 block">
+                About
+              </Link>
+              <Link href="/page-not-found" className="hover:text-white cursor-pointer border-t border-transparent block">
+                Privacy Policy
+              </Link>
+              <Link href="/page-not-found" className="hover:text-white cursor-pointer border-t border-transparent block">
+                Terms of Service
+              </Link>
+              <li className="hover:text-white cursor-pointer border-t border-transparent block">Contact</li>
+            </ul>
+          </div>
+
+          {/* LOGO + ABOUT */}
+          <div className="flex flex-col gap-6 items-start md:items-end text-left md:text-right">
+            <div className="flex flex-col gap-3">
+              {/* <img src="./public/stackly-logo1.png" className="h-[20px]" /> */}
+              <Link
+                href="/"
+                className="flex items-center justify-center rounded-[60%] bg-white transition-all duration-300 hover:scale-105 shadow-sm w-[100px] h-[40px] overflow-hidden leading-none"
+              >
+                <img src="./public/stackly-logo1.png" className="w-full h-full object-cover object-center scale-[1.15]" alt="Logo" />
+              </Link>
+            </div>
+
+            <p className="text-[12px] text-white/70 max-w-[220px]">
+              The <strong className="text-white">NO-CODE</strong> website builder for everyone. Powered by AWS infrastructure, built by The <strong className="text-white">Stackly</strong> team.
+            </p>
+          </div>
+        </div>
+
+        {/* DIVIDER */}
+        <div className="w-full h-px bg-white/10 mb-4"></div>
+
+        {/* BOTTOM */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+          {/* ✅ UPDATED SOCIAL ICONS */}
+          <div className="bg-white rounded-full px-5 py-2.5 flex items-center gap-4 text-[#051b3b]">
+            <a
+              href="https://www.facebook.com/thestackly/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:scale-110 hover:text-blue-600 transition"
+            >
+              <Users size={14} />
+            </a>
+            <a
+              href="https://www.youtube.com/@TheStackly"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:scale-110 hover:text-red-600 transition"
+            >
+              <Video size={14} />
+            </a>
+            <a
+              href="https://www.instagram.com/the_stackly/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:scale-110 hover:text-pink-600 transition"
+            >
+              <Camera size={14} />
+            </a>
+
+            <a
+              href="https://x.com/the_stackly"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:scale-110 hover:text-black transition"
+            >
+              <MessageCircle size={14} />
+            </a>
+
+            <a
+              href="https://www.linkedin.com/company/stackly/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:scale-110 hover:text-blue-700 transition"
+            >
+              <Briefcase size={14} />
+            </a>
+
+            <a
+              href="https://www.thestackly.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:scale-110 hover:text-green-600 transition"
+            >
+              <Globe size={14} />
+            </a>
+          </div>
+
+          {/* COPYRIGHT */}
+          <div className="flex flex-wrap items-center justify-center gap-6 text-[12px] text-white/70">
+            <Link href="/page-not-found" className="hover:text-white transition block border-t border-transparent">
+              Terms of Use
+            </Link>
+            <Link href="/page-not-found" className="hover:text-white transition block border-t border-transparent">
+              Privacy Policy
+            </Link>
+            <span>© 2018-2026 Stackly.com, Inc</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
 /* --- page.tsx --- */
+
 
 
 
@@ -929,9 +1144,9 @@ function Page() {
   };
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-[#F0F2F5] font-sans">
+    <div className="flex flex-col min-h-screen overflow-x-hidden bg-[#F0F2F5] font-sans">
       <Header />
-      <div className="flex flex-1 h-[calc(100vh-80px)] relative w-full overflow-hidden">
+      <div className="flex flex-1 h-[calc(100vh-80px)] flex-shrink-0 relative w-full overflow-hidden">
         
         {/* Mobile Edge Toggle Left */}
         <button 
@@ -1001,6 +1216,7 @@ function Page() {
         </div>
         
       </div>
+      <Footer />
     </div>
   );
 }
